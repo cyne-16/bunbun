@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BunBun Crochet - Wearables Collection</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-brown: #8B4513;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --cream: #F5F5DC;
+            --warm-white: #FFF8E7;
+            --soft-brown: #DEB887;
+            --accent-brown: #A0522D;
+            --error-red: #E74C3C;
+            --success-green: #27AE60;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+            min-height: 100vh;
+            color: var(--dark-brown);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.1);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--light-brown);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: var(--primary-brown);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(101, 67, 33, 0.1);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: var(--accent-brown);
+            margin-bottom: 20px;
+        }
+
+        .bunny-icon {
+            font-size: 3em;
+            color: var(--primary-brown);
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .filter-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--warm-white);
+            border: 2px solid var(--primary-brown);
+            color: var(--primary-brown);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary-brown);
+            color: var(--warm-white);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 100px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(139, 69, 19, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            
+            width: 400px;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            border: 2px solid var(--light-brown);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(139, 69, 19, 0.15);
+            border-color: var(--primary-brown);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, var(--cream), var(--soft-brown));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="yarn" patternUnits="userSpaceOnUse" width="10" height="10"><circle cx="5" cy="5" r="2" fill="%23A0522D" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23yarn)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .product-image i {
+            font-size: 4em;
+            color: var(--primary-brown);
+            opacity: 0.8;
+            z-index: 1;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--dark-brown);
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .product-description {
+            color: var(--accent-brown);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--primary-brown);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
+            color: var(--warm-white);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+            background: linear-gradient(135deg, var(--accent-brown), var(--primary-brown));
+        }
+
+        .add-to-cart:active {
+            transform: translateY(0);
+        }
+
+        .cart-icon {
+            font-size: 1.2em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2em;
+            color: var(--accent-brown);
+        }
+
+        .loading i {
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            color: var(--primary-brown);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cart-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success-green);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .cart-notification.show {
+            transform: translateX(0);
+        }
+
+        .login-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--error-red);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .login-notification.show {
+            transform: translateX(0);
+        }
+
+        .add-to-cart:disabled {
+            background: var(--soft-brown);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .add-to-cart:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-prompt {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .login-prompt.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-modal {
+            background: var(--warm-white);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            border: 2px solid var(--light-brown);
+        }
+
+        .login-modal h3 {
+            color: var(--primary-brown);
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .login-modal p {
+            color: var(--accent-brown);
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .login-modal .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .login-modal button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
+            color: var(--warm-white);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        }
+
+        .cancel-btn {
+            background: var(--soft-brown);
+            color: var(--dark-brown);
+        }
+
+        .cancel-btn:hover {
+            background: var(--light-brown);
+        }
+
+        .user-status {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid var(--light-brown);
+            color: var(--dark-brown);
+            font-weight: bold;
+            z-index: 1000;
+        }
+
+        .user-status.logged-in {
+            background: rgba(39, 174, 96, 0.1);
+            border-color: var(--success-green);
+            color: var(--success-green);
+        }
+
+        .user-status.logged-out {
+            background: rgba(231, 76, 60, 0.1);
+            border-color: var(--error-red);
+            color: var(--error-red);
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .filter-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BunBun Crochet Shop</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="js/script.js" defer></script>
+</head>
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <img src="images/bunbun.png" alt="BunBun Logo">
+        <h1>BunBun Threads</h1>
+      </div>
+      <nav id="nav-icons">
+        <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+        <a href="#" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="#" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+        <a href="#" title="Profile"><i class="fas fa-user"></i></a>
+      </nav>
+    </div>
+  </header>
+<body>
+   
+    <div class="container">
+        <div class="header">
+             <img src="images/bunbun.png" alt="BunBun Logo" style="width: 200px;height:200px;">
+            <h1>BunBun Crochet</h1>
+            <p>Handcrafted Wearables Collection</p>
+        </div>
+
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">All Items</button>
+                <button class="filter-btn" data-category="sweaters">Sweaters</button>
+                <button class="filter-btn" data-category="hats">Hats</button>
+                <button class="filter-btn" data-category="scarves">Scarves</button>
+                <button class="filter-btn" data-category="accessories">Accessories</button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <i class="fas fa-spinner"></i>
+            Loading beautiful wearables...
+        </div>
+
+        <div class="products-grid" id="productsGrid" style="display: none;">
+            <!-- Products will be loaded here -->
+        </div>
+    </div>
+
+
+    <div class="login-prompt" id="loginPrompt">
+        <div class="login-modal">
+            <h3>🐰 Login Required</h3>
+            <p>You need to be logged in to add items to your cart. Would you like to log in now?</p>
+            <div class="modal-buttons">
+                <button class="login-btn" onclick="redirectToLogin()">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="cancel-btn" onclick="closeLoginPrompt()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - replace with your actual API endpoint
+        
+        let allProducts = [];
+        let currentCategory = 'all';
+        let cart = [];
+        let isLoggedIn = false; // This should be set based on your authentication system
+
+        $(document).ready(function() {
+            // Check login status on page load
+            checkLoginStatus();
+
+            // Simulate loading
+          setTimeout(function() {
+    $('#loading').fadeOut();
+    $('#productsGrid').fadeIn();
+    loadProductsFromServer();
+}, 1500);
+
+
+            // Filter functionality
+            $('.filter-btn').click(function() {
+                $('.filter-btn').removeClass('active');
+                $(this).addClass('active');
+                currentCategory = $(this).data('category');
+                filterProducts();
+            });
+
+            // Close login prompt when clicking outside
+            $('#loginPrompt').click(function(e) {
+                if (e.target === this) {
+                    closeLoginPrompt();
+                }
+            });
+        });
+
+      function renderProducts(products) {
+    const grid = $('#productsGrid');
+    grid.empty();
+
+    products.forEach((product, index) => {
+        const addToCartButton = isLoggedIn 
+            ? <button class="add-to-cart" data-product-id="${product.id}">
+                <i class="fas fa-shopping-cart cart-icon"></i> Add to Cart
+               </button>
+            : <button class="add-to-cart" disabled data-product-id="${product.id}">
+                <i class="fas fa-lock cart-icon"></i> Login to Add
+               </button>;
+
+        const card = $(
+            <div class="product-card fade-in" data-category="${product.category}" style="animation-delay: ${index * 0.1}s">
+                <div class="product-image">
+                    <img src="${product.image_url}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-price">₱${product.price.toFixed(2)}</div>
+                    ${addToCartButton}
+                </div>
+            </div>
+        );
+
+        grid.append(card);
+    });
+
+    // Add to cart functionality
+    $('.add-to-cart').click(function () {
+        if (!isLoggedIn) {
+            showLoginPrompt();
+            return;
+        }
+
+        const productId = $(this).data('product-id');
+        const product = products.find(p => p.id === productId);
+
+        if (product) {
+            addToCart(product);
+            showCartNotification();
+
+            $(this).addClass('loading');
+            setTimeout(() => {
+                $(this).removeClass('loading');
+            }, 1000);
+        }
+    });
+}
+
+      function filterProducts() {
+    const filtered = currentCategory === 'all'
+        ? allProducts
+        : allProducts.filter(product => product.category === currentCategory);
+
+    $('#productsGrid').fadeOut(200, function() {
+        renderProducts(filtered);
+        $(this).fadeIn(200);
+    });
+}
+
+
+        function addToCart(product) {
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({...product, quantity: 1});
+            }
+            
+            console.log('Cart updated:', cart);
+            
+            // Here you would typically send the cart data to your Node.js backend
+            // Example: sendCartToServer(cart);
+        }
+
+        function showCartNotification() {
+            const notification = $('#cartNotification');
+            notification.addClass('show');
+            
+            setTimeout(() => {
+                notification.removeClass('show');
+            }, 3000);
+        }
+
+        function showLoginNotification() {
+            const notification = $('#loginNotification');
+            notification.addClass('show');
+            
+            setTimeout(() => {
+                notification.removeClass('show');
+            }, 3000);
+        }
+
+        function showLoginPrompt() {
+            $('#loginPrompt').addClass('show');
+            showLoginNotification();
+        }
+
+        function closeLoginPrompt() {
+            $('#loginPrompt').removeClass('show');
+        }
+
+        function redirectToLogin() {
+            // Replace with your actual login page URL
+            window.location.href = '/login';
+        }
+
+        function checkLoginStatus() {
+            // This function should check your authentication system
+            // For demo purposes, we'll simulate checking with a cookie or localStorage
+            
+            // Example: Check if user token exists
+            // const token = localStorage.getItem('userToken');
+            // isLoggedIn = token ? true : false;
+            
+            // For now, we'll simulate with a random check (remove this in production)
+            // You can manually test by changing this to true
+            isLoggedIn = false;
+            
+            updateUserStatus();
+        }
+
+        function updateUserStatus() {
+            const statusElement = $('#userStatus');
+            
+            if (isLoggedIn) {
+                statusElement.removeClass('logged-out').addClass('logged-in');
+                statusElement.html('<i class="fas fa-user-check"></i> Welcome Back!');
+            } else {
+                statusElement.removeClass('logged-in').addClass('logged-out');
+                statusElement.html('<i class="fas fa-user-slash"></i> Not Logged In');
+            }
+        }
+
+        // Function to simulate login (for testing purposes)
+       function simulateLogin() {
+    isLoggedIn = true;
+    updateUserStatus();
+    closeLoginPrompt();
+
+    const currentProducts = currentCategory === 'all'
+        ? allProducts
+        : allProducts.filter(product => product.category === currentCategory);
+
+    renderProducts(currentProducts);
+            
+            // Show success message
+            const notification = $('#cartNotification');
+            notification.find('i').attr('class', 'fas fa-sign-in-alt');
+            notification.find('text').text('Successfully logged in!');
+            notification.addClass('show');
+            
+            setTimeout(() => {
+                notification.removeClass('show');
+            }, 3000);
+        }
+
+        // Function to send cart data to Node.js backend
+        function sendCartToServer(cartData) {
+            // Example implementation - replace with your actual endpoint
+            $.ajax({
+                url: '/api/cart',
+                method: 'POST',
+                data: JSON.stringify(cartData),
+                contentType: 'application/json',
+                success: function(response) {
+                    console.log('Cart updated on server:', response);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error updating cart:', error);
+                }
+            });
+        }
+
+       function loadProductsFromServer() {
+    $.ajax({
+        url: '/api/products/wearables', 
+        method: 'GET',
+        success: function(products) {
+            allProducts = products; // 👈 store for filtering
+            renderProducts(allProducts);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading products:', error);
+            $('#productsGrid').html('<p>Failed to load products.</p>');
+        }
+    });
+}
+
+
+    </script>
+</body>
+</html>

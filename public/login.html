@@ -585,171 +585,158 @@
         </div>
     </main>
 
-    <script>
-        $(document).ready(function() {
-            // Create floating particles
-            function createParticle() {
-                const particle = $('<div class="particle"></div>');
-                particle.css({
-                    left: Math.random() * 100 + '%',
-                    animationDelay: Math.random() * 2 + 's',
-                    animationDuration: (Math.random() * 3 + 4) + 's'
-                });
-                $('body').append(particle);
-                
-                setTimeout(() => {
-                    particle.remove();
-                }, 7000);
-            }
-            
-            // Create particles periodically
-            setInterval(createParticle, 2000);
-            
-            // Input validation functions
-            function validateEmail(email) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return emailRegex.test(email);
-            }
-            
-            function validatePassword(password) {
-                return password.length >= 8;
-            }
-            
-            function showError(inputId, message) {
-                const input = $('#' + inputId);
-                const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
-                
-                input.addClass('error').removeClass('success');
-                errorDiv.text(message).addClass('show');
-                
-                setTimeout(() => {
-                    input.removeClass('error');
-                }, 500);
-            }
-            
-            function showSuccess(inputId) {
-                const input = $('#' + inputId);
-                const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
-                
-                input.addClass('success').removeClass('error');
-                errorDiv.removeClass('show');
-            }
-            
-            // Real-time validation
-            $('#loginEmail').on('input blur', function() {
-                const value = $(this).val();
-                if (value && !validateEmail(value)) {
-                    showError('loginEmail', 'Please enter a valid email address');
-                } else if (value) {
-                    showSuccess('loginEmail');
-                }
+   <script>
+    $(document).ready(function() {
+        // Create floating particles
+        function createParticle() {
+            const particle = $('<div class="particle"></div>');
+            particle.css({
+                left: Math.random() * 100 + '%',
+                animationDelay: Math.random() * 2 + 's',
+                animationDuration: (Math.random() * 3 + 4) + 's'
             });
-            
-            $('#loginPassword').on('input blur', function() {
-                const value = $(this).val();
-                if (value && !validatePassword(value)) {
-                    showError('loginPassword', 'Password must be at least 8 characters long');
-                } else if (value) {
-                    showSuccess('loginPassword');
-                }
-            });
-            
-            // Forgot password functionality
-            $('#forgotPasswordLink').on('click', function(e) {
-                e.preventDefault();
-                const email = $('#loginEmail').val();
-                
-                if (!email) {
-                    showError('loginEmail', 'Please enter your email address first');
-                    $('#loginEmail').focus();
-                    return;
-                }
-                
-                if (!validateEmail(email)) {
-                    showError('loginEmail', 'Please enter a valid email address');
-                    $('#loginEmail').focus();
-                    return;
-                }
-                
-                // Simulate password reset request
-                alert('Password reset instructions have been sent to your email address.');
-            });
-            
-            // Form submission
-            $("#submitLogin").on("click", function (e) {
-                e.preventDefault();
-                
-                const email = $("#loginEmail").val();
-                const password = $("#loginPassword").val();
-                const rememberMe = $("#rememberMe").is(':checked');
-                
-                // Validate all fields
-                let isValid = true;
-                
-                if (!email || !validateEmail(email)) {
-                    showError('loginEmail', 'Please enter a valid email address');
-                    isValid = false;
-                }
-                
-                if (!password || !validatePassword(password)) {
-                    showError('loginPassword', 'Password must be at least 8 characters long');
-                    isValid = false;
-                }
-                
-                if (!isValid) return;
-                
-                // Show loading state
-                const button = $(this);
-                const buttonText = button.find('.button-text');
-                const loading = button.find('.loading');
-                
-                button.prop('disabled', true);
-                buttonText.text('Signing In...');
-                loading.show();
-                
-                const credentials = { email, password, rememberMe };
-                
-                // Simulate API call delay for demo
-                setTimeout(() => {
-                    $.post("/api/auth/login", credentials)
-                        .done(function (response) {
-                            $('#successMessage').addClass('show');
-                            setTimeout(() => {
-                                // Redirect to dashboard or home page
-                                window.location.href = "index.html";
-                            }, 2000);
-                        })
-                        .fail(function (xhr) {
-                            let errorMessage = "Login failed. Please try again.";
-                            if (xhr.status === 401) {
-                                errorMessage = "Invalid email or password.";
-                                showError('loginPassword', errorMessage);
-                            } else if (xhr.status === 404) {
-                                errorMessage = "Account not found. Please sign up first.";
-                                showError('loginEmail', errorMessage);
-                            } else {
-                                alert(errorMessage);
-                            }
-                        })
-                        .always(function() {
-                            button.prop('disabled', false);
-                            buttonText.text('Login');
-                            loading.hide();
-                        });
-                }, 1000);
-            });
-            
-            // Enter key submission
-            $('.form-container input').keypress(function(e) {
-                if (e.which === 13) {
-                    $('#submitLogin').click();
-                }
-            });
-            
-            // Auto-focus on email field
-            $('#loginEmail').focus();
-        });
-    </script>
-</body>
+            $('body').append(particle);
+            setTimeout(() => particle.remove(), 7000);
+        }
 
+        setInterval(createParticle, 2000);
+
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 8;
+        }
+
+        function showError(inputId, message) {
+            const input = $('#' + inputId);
+            const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
+            input.addClass('error').removeClass('success');
+            errorDiv.text(message).addClass('show');
+            setTimeout(() => input.removeClass('error'), 500);
+        }
+
+        function showSuccess(inputId) {
+            const input = $('#' + inputId);
+            const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
+            input.addClass('success').removeClass('error');
+            errorDiv.removeClass('show');
+        }
+
+        $('#loginEmail').on('input blur', function() {
+            const value = $(this).val();
+            if (value && !validateEmail(value)) {
+                showError('loginEmail', 'Please enter a valid email address');
+            } else if (value) {
+                showSuccess('loginEmail');
+            }
+        });
+
+        $('#loginPassword').on('input blur', function() {
+            const value = $(this).val();
+            if (value && !validatePassword(value)) {
+                showError('loginPassword', 'Password must be at least 8 characters long');
+            } else if (value) {
+                showSuccess('loginPassword');
+            }
+        });
+
+        $('#forgotPasswordLink').on('click', function(e) {
+            e.preventDefault();
+            const email = $('#loginEmail').val();
+
+            if (!email) {
+                showError('loginEmail', 'Please enter your email address first');
+                $('#loginEmail').focus();
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showError('loginEmail', 'Please enter a valid email address');
+                $('#loginEmail').focus();
+                return;
+            }
+
+            alert('Password reset instructions have been sent to your email address.');
+        });
+
+        $("#submitLogin").on("click", function (e) {
+            e.preventDefault();
+
+            const email = $("#loginEmail").val();
+            const password = $("#loginPassword").val();
+            const rememberMe = $("#rememberMe").is(':checked');
+            let isValid = true;
+
+            if (!email || !validateEmail(email)) {
+                showError('loginEmail', 'Please enter a valid email address');
+                isValid = false;
+            }
+
+            if (!password || !validatePassword(password)) {
+                showError('loginPassword', 'Password must be at least 8 characters long');
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            const button = $(this);
+            const buttonText = button.find('.button-text');
+            const loading = button.find('.loading');
+
+            button.prop('disabled', true);
+            buttonText.text('Signing In...');
+            loading.show();
+
+            const credentials = { email, password };
+
+            setTimeout(() => {
+                $.ajax({
+                    url: "/api/auth/login",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(credentials),
+                    success: function (response) {
+                        $('#successMessage').addClass('show');
+                        setTimeout(() => {
+                            window.location.href = "index.html";
+                        }, 2000);
+                    },
+                    error: function (xhr) {
+                        let errorMessage = "Login failed. Please try again.";
+                        if (xhr.status === 401) {
+                            errorMessage = "Invalid email or password.";
+                            showError('loginPassword', errorMessage);
+                        } else if (xhr.status === 404) {
+                            errorMessage = "Account not found. Please sign up first.";
+                            showError('loginEmail', errorMessage);
+                        } else {
+                            alert(errorMessage);
+                        }
+                    },
+                    complete: function () {
+                        button.prop('disabled', false);
+                        buttonText.text('Login');
+                        loading.hide();
+                    }
+                });
+            }, 1000);
+        });
+
+        // Enter key submission
+        $('.form-container input').keypress(function(e) {
+            if (e.which === 13) {
+                $('#submitLogin').click();
+            }
+        });
+
+        // Auto-focus
+        $('#loginEmail').focus();
+    });
+</script>
+
+</body>
+        
 </html>

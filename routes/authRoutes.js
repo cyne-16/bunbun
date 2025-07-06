@@ -30,7 +30,10 @@ router.post('/login', (req, res) => {
         if (results.length === 0) return res.status(401).send('Invalid email or password');
 
         const user = results[0];
-        const match = await bcrypt.compare(password, user.password);
+      const inputPassword = password.trim();
+const storedHash = user.password.trim(); // In case it has trailing whitespace
+const match = await bcrypt.compare(inputPassword, storedHash);
+
 
         if (!match) return res.status(401).send('Invalid email or password');
 

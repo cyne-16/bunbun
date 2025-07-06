@@ -41,12 +41,13 @@ CREATE TABLE itemimg (
 );
 
 INSERT INTO itemimg (item_id, img_path) VALUES
-(1, './item/images/tote_bag.jpg'),
-(2, './item/images/coaster_set.jpg'),
-(3, './item/images/keychain.jpg'),
-(4, './item/images/bucket_hat.jpg'),
-(5, './item/images/plant_hanger.jpg'),
-(6, './item/images/pet_sweater.jpg');
+(1, './public/images/1.jpg'),
+(2, './public/images/2.jpg'),
+(3, './public/images/3.jpg'),
+(4, './public/images/4.jpg'),
+(5, './public/images/5.jpg'),
+(6, './public/images/6.jpg');
+
 
 -- Stock
 CREATE TABLE stock (
