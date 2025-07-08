@@ -1,15 +1,15 @@
-// routes/productRoutes.js
+
 const express = require('express');
 const router = express.Router();
 
-// Import sub-routes
 const newProducts = require('./product/new');
 const popularProducts = require('./product/popular');
 const wearablesProducts = require('./product/wearables');
+const decorProducts = require('./product/decor');
 
-// Use them under /api/products/new and /api/products/popular
 router.use('/new', newProducts);
 router.use('/popular', popularProducts);
 router.use('/wearables', wearablesProducts);
+router.use('/decor', decorProducts);
 
 module.exports = router;

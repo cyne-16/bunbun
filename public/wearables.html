@@ -1,11 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BunBun Crochet - Wearables Collection</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BunBun Threads</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="images/bunbun.png" alt="BunBun Logo">
+                <h1>BunBun Threads</h1>
+            </div>
+            <nav id="nav-icons">
+                <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+                <a href="#" title="About"><i class="fas fa-info-circle"></i></a>
+                <a href="#" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#" title="Profile"><i class="fas fa-user"></i></a>
+            </nav>
+        </div>
+    </header>
+
+
+
+
     <style>
         :root {
             --primary-brown: #8B4513;
@@ -19,10 +43,121 @@
             --success-green: #27AE60;
         }
 
+        main {
+            margin-top: 100px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: var(--dark-brown);
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
+            color: var(--warm-white);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+            height: 100px;
+            transform: translateY(-100%);
+            animation: slideDown 0.8s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        header .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--warm-white);
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .logo img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        #nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        #nav-icons a {
+            color: var(--warm-white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #nav-icons a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        #nav-icons a:hover::before {
+            left: 100%;
+        }
+
+        #nav-icons a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         body {
@@ -30,6 +165,8 @@
             background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
             min-height: 100vh;
             color: var(--dark-brown);
+            line-height: 1.6;
+            margin-top: 100px;
         }
 
         .container {
@@ -41,696 +178,407 @@
         .header {
             text-align: center;
             margin-bottom: 40px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 30px;
+            padding: 30px 0;
+            background: white;
+            border: 2px solid var(--soft-brown);
+            color: var(--primary-brown);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.1);
-            backdrop-filter: blur(10px);
-            border: 2px solid var(--light-brown);
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
         }
 
         .header h1 {
-            font-size: 2.5em;
             color: var(--primary-brown);
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(101, 67, 33, 0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
-            font-size: 1.2em;
             color: var(--accent-brown);
-            margin-bottom: 20px;
+            font-size: 1.1rem;
         }
 
-        .bunny-icon {
-            font-size: 3em;
-            color: var(--primary-brown);
-            margin-bottom: 15px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-10px);
-            }
-            60% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .filter-section {
-            margin-bottom: 30px;
+        .loading {
             text-align: center;
-        }
-
-        .filter-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: var(--warm-white);
-            border: 2px solid var(--primary-brown);
+            padding: 50px;
+            font-size: 1.2rem;
             color: var(--primary-brown);
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: bold;
         }
 
-        .filter-btn:hover, .filter-btn.active {
-            background: var(--primary-brown);
-            color: var(--warm-white);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
+        .spinner {
+            border: 4px solid var(--light-brown);
+            border-top: 4px solid var(--primary-brown);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 100px;
             margin-top: 30px;
         }
 
         .product-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: var(--warm-white);
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 35px rgba(139, 69, 19, 0.1);
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15);
             transition: all 0.3s ease;
+            border: 2px solid transparent;
             position: relative;
-            
-            width: 400px;
-            height: 450px;
-            display: flex;
-            flex-direction: column;
-            border: 2px solid var(--light-brown);
+            height: 520px;
         }
 
         .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(139, 69, 19, 0.15);
-            border-color: var(--primary-brown);
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.25);
+            border-color: var(--soft-brown);
         }
 
         .product-image {
             width: 100%;
             height: 250px;
-            background: linear-gradient(45deg, var(--cream), var(--soft-brown));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+            object-fit: cover;
+            transition: transform 0.3s ease;
         }
 
-        .product-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="yarn" patternUnits="userSpaceOnUse" width="10" height="10"><circle cx="5" cy="5" r="2" fill="%23A0522D" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23yarn)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .product-image i {
-            font-size: 4em;
-            color: var(--primary-brown);
-            opacity: 0.8;
-            z-index: 1;
+        .product-card:hover .product-image {
+            transform: scale(1.05);
         }
 
         .product-info {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            padding: 25px;
         }
 
-        .product-title {
-            font-size: 1.3em;
+        .product-name {
+            font-size: 1.3rem;
             font-weight: bold;
-            color: var(--dark-brown);
-            margin-bottom: 8px;
-            text-align: center;
+            color: var(--primary-brown);
+            margin-bottom: 10px;
         }
 
         .product-description {
-            color: var(--accent-brown);
-            font-size: 0.9em;
+            color: var(--dark-brown);
             margin-bottom: 15px;
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        .product-price {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: var(--primary-brown);
-            text-align: center;
-            margin-bottom: 15px;
-        }
-
-        .add-to-cart {
-            background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
-            color: var(--warm-white);
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .add-to-cart:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
-            background: linear-gradient(135deg, var(--accent-brown), var(--primary-brown));
-        }
-
-        .add-to-cart:active {
-            transform: translateY(0);
-        }
-
-        .cart-icon {
-            font-size: 1.2em;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            font-size: 1.2em;
-            color: var(--accent-brown);
-        }
-
-        .loading i {
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-            color: var(--primary-brown);
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .cart-notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--success-green);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .cart-notification.show {
-            transform: translateX(0);
-        }
-
-        .login-notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--error-red);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .login-notification.show {
-            transform: translateX(0);
-        }
-
-        .add-to-cart:disabled {
-            background: var(--soft-brown);
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
-        .add-to-cart:disabled:hover {
-            transform: none;
-            box-shadow: none;
-        }
-
-        .login-prompt {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .login-prompt.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .login-modal {
-            background: var(--warm-white);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            border: 2px solid var(--light-brown);
-        }
-
-        .login-modal h3 {
-            color: var(--primary-brown);
-            margin-bottom: 15px;
-            font-size: 1.5em;
-        }
-
-        .login-modal p {
-            color: var(--accent-brown);
-            margin-bottom: 25px;
+            font-size: 0.95rem;
             line-height: 1.5;
         }
 
-        .login-modal .modal-buttons {
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-brown);
+            margin-bottom: 15px;
+        }
+
+        .product-category {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--light-brown), var(--soft-brown));
+            color: var(--dark-brown);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-brown) 0%, var(--accent-brown) 100%);
+            color: var(--warm-white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+
+        .error-message {
+            background: var(--error-red);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 50px;
+            color: var(--primary-brown);
+            font-size: 1.2rem;
+        }
+
+        .filters {
+            background: var(--cream);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
             display: flex;
             gap: 15px;
-            justify-content: center;
             flex-wrap: wrap;
+            align-items: center;
         }
 
-        .login-modal button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1em;
-        }
-
-        .login-btn {
-            background: linear-gradient(135deg, var(--primary-brown), var(--dark-brown));
-            color: var(--warm-white);
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.3);
-        }
-
-        .cancel-btn {
-            background: var(--soft-brown);
             color: var(--dark-brown);
+            font-size: 0.9rem;
         }
 
-        .cancel-btn:hover {
-            background: var(--light-brown);
-        }
-
-        .user-status {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px 20px;
-            border-radius: 25px;
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
             border: 2px solid var(--light-brown);
+            border-radius: 8px;
+            background: var(--warm-white);
             color: var(--dark-brown);
-            font-weight: bold;
-            z-index: 1000;
+            font-size: 0.9rem;
         }
 
-        .user-status.logged-in {
-            background: rgba(39, 174, 96, 0.1);
-            border-color: var(--success-green);
-            color: var(--success-green);
-        }
-
-        .user-status.logged-out {
-            background: rgba(231, 76, 60, 0.1);
-            border-color: var(--error-red);
-            color: var(--error-red);
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary-brown);
         }
 
         @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
             .products-grid {
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                grid-template-columns: 1fr;
                 gap: 20px;
             }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .filter-buttons {
+
+            .filters {
                 flex-direction: column;
-                align-items: center;
+                align-items: stretch;
             }
         }
     </style>
-</head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BunBun Crochet Shop</title>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="js/script.js" defer></script>
-</head>
-<body>
-  <header>
-    <div class="header-content">
-      <div class="logo">
-        <img src="images/bunbun.png" alt="BunBun Logo">
-        <h1>BunBun Threads</h1>
-      </div>
-      <nav id="nav-icons">
-        <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
-        <a href="#" title="About"><i class="fas fa-info-circle"></i></a>
-        <a href="#" title="Cart"><i class="fas fa-shopping-cart"></i></a>
-        <a href="#" title="Profile"><i class="fas fa-user"></i></a>
-      </nav>
-    </div>
-  </header>
-<body>
-   
-    <div class="container">
-        <div class="header">
-             <img src="images/bunbun.png" alt="BunBun Logo" style="width: 200px;height:200px;">
-            <h1>BunBun Crochet</h1>
-            <p>Handcrafted Wearables Collection</p>
-        </div>
+    </head>
 
-        <div class="filter-section">
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-category="all">All Items</button>
-                <button class="filter-btn" data-category="sweaters">Sweaters</button>
-                <button class="filter-btn" data-category="hats">Hats</button>
-                <button class="filter-btn" data-category="scarves">Scarves</button>
-                <button class="filter-btn" data-category="accessories">Accessories</button>
+    <body>
+        <div class="container">
+            <div class="header">
+                <img src="images/bunbun.png" alt="BunBun Logo" style="width: 200px;height:200px;">
+                <h1>BunBun Threads</h1>
+                <p>Handcrafted Wearables Collection</p>
             </div>
-        </div>
 
-        <div class="loading" id="loading">
-            <i class="fas fa-spinner"></i>
-            Loading beautiful wearables...
-        </div>
-
-        <div class="products-grid" id="productsGrid" style="display: none;">
-            <!-- Products will be loaded here -->
-        </div>
-    </div>
-
-
-    <div class="login-prompt" id="loginPrompt">
-        <div class="login-modal">
-            <h3>🐰 Login Required</h3>
-            <p>You need to be logged in to add items to your cart. Would you like to log in now?</p>
-            <div class="modal-buttons">
-                <button class="login-btn" onclick="redirectToLogin()">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-                <button class="cancel-btn" onclick="closeLoginPrompt()">
-                    <i class="fas fa-times"></i> Cancel
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Sample data - replace with your actual API endpoint
-        
-        let allProducts = [];
-        let currentCategory = 'all';
-        let cart = [];
-        let isLoggedIn = false; // This should be set based on your authentication system
-
-        $(document).ready(function() {
-            // Check login status on page load
-            checkLoginStatus();
-
-            // Simulate loading
-          setTimeout(function() {
-    $('#loading').fadeOut();
-    $('#productsGrid').fadeIn();
-    loadProductsFromServer();
-}, 1500);
-
-
-            // Filter functionality
-            $('.filter-btn').click(function() {
-                $('.filter-btn').removeClass('active');
-                $(this).addClass('active');
-                currentCategory = $(this).data('category');
-                filterProducts();
-            });
-
-            // Close login prompt when clicking outside
-            $('#loginPrompt').click(function(e) {
-                if (e.target === this) {
-                    closeLoginPrompt();
-                }
-            });
-        });
-
-      function renderProducts(products) {
-    const grid = $('#productsGrid');
-    grid.empty();
-
-    products.forEach((product, index) => {
-        const addToCartButton = isLoggedIn 
-            ? <button class="add-to-cart" data-product-id="${product.id}">
-                <i class="fas fa-shopping-cart cart-icon"></i> Add to Cart
-               </button>
-            : <button class="add-to-cart" disabled data-product-id="${product.id}">
-                <i class="fas fa-lock cart-icon"></i> Login to Add
-               </button>;
-
-        const card = $(
-            <div class="product-card fade-in" data-category="${product.category}" style="animation-delay: ${index * 0.1}s">
-                <div class="product-image">
-                    <img src="${product.image_url}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="categoryFilter">Category:</label>
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                    </select>
                 </div>
-                <div class="product-info">
-                    <h3 class="product-title">${product.name}</h3>
-                    <p class="product-description">${product.description}</p>
-                    <div class="product-price">₱${product.price.toFixed(2)}</div>
-                    ${addToCartButton}
+                <div class="filter-group">
+                    <label for="priceFilter">Max Price:</label>
+                    <input type="number" id="priceFilter" placeholder="Enter max price">
+                </div>
+                <div class="filter-group">
+                    <label for="searchFilter">Search:</label>
+                    <input type="text" id="searchFilter" placeholder="Search products...">
                 </div>
             </div>
-        );
 
-        grid.append(card);
-    });
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading beautiful decor products...</p>
+            </div>
 
-    // Add to cart functionality
-    $('.add-to-cart').click(function () {
-        if (!isLoggedIn) {
-            showLoginPrompt();
-            return;
-        }
+            <div id="error" class="error-message" style="display: none;"></div>
 
-        const productId = $(this).data('product-id');
-        const product = products.find(p => p.id === productId);
+            <div id="products-container" class="products-grid"></div>
+        </div>
 
-        if (product) {
-            addToCart(product);
-            showCartNotification();
+        <script>
+            $(document).ready(function () {
+                let allProducts = [];
+                let filteredProducts = [];
 
-            $(this).addClass('loading');
-            setTimeout(() => {
-                $(this).removeClass('loading');
-            }, 1000);
-        }
-    });
-}
+                // Load products from backend
+                function loadProducts() {
+                    const endpoints = ['/api/products/wearables'];
+                    let loadedCount = 0;
+                    allProducts = [];
 
-      function filterProducts() {
-    const filtered = currentCategory === 'all'
-        ? allProducts
-        : allProducts.filter(product => product.category === currentCategory);
+                    endpoints.forEach(endpoint => {
+                        $.ajax({
+                            url: endpoint,
+                            method: 'GET',
+                            success: function (data) {
+                                allProducts = allProducts.concat(data);
+                                loadedCount++;
 
-    $('#productsGrid').fadeOut(200, function() {
-        renderProducts(filtered);
-        $(this).fadeIn(200);
-    });
-}
+                                if (loadedCount === endpoints.length) {
+                                    // All endpoints loaded
+                                    filteredProducts = [...allProducts];
+                                    displayProducts(filteredProducts);
+                                    populateFilters();
+                                    $('#loading').hide();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error loading products from ' + endpoint + ':', error);
+                                loadedCount++;
 
-
-        function addToCart(product) {
-            const existingItem = cart.find(item => item.id === product.id);
-            
-            if (existingItem) {
-                existingItem.quantity += 1;
-            } else {
-                cart.push({...product, quantity: 1});
-            }
-            
-            console.log('Cart updated:', cart);
-            
-            // Here you would typically send the cart data to your Node.js backend
-            // Example: sendCartToServer(cart);
-        }
-
-        function showCartNotification() {
-            const notification = $('#cartNotification');
-            notification.addClass('show');
-            
-            setTimeout(() => {
-                notification.removeClass('show');
-            }, 3000);
-        }
-
-        function showLoginNotification() {
-            const notification = $('#loginNotification');
-            notification.addClass('show');
-            
-            setTimeout(() => {
-                notification.removeClass('show');
-            }, 3000);
-        }
-
-        function showLoginPrompt() {
-            $('#loginPrompt').addClass('show');
-            showLoginNotification();
-        }
-
-        function closeLoginPrompt() {
-            $('#loginPrompt').removeClass('show');
-        }
-
-        function redirectToLogin() {
-            // Replace with your actual login page URL
-            window.location.href = '/login';
-        }
-
-        function checkLoginStatus() {
-            // This function should check your authentication system
-            // For demo purposes, we'll simulate checking with a cookie or localStorage
-            
-            // Example: Check if user token exists
-            // const token = localStorage.getItem('userToken');
-            // isLoggedIn = token ? true : false;
-            
-            // For now, we'll simulate with a random check (remove this in production)
-            // You can manually test by changing this to true
-            isLoggedIn = false;
-            
-            updateUserStatus();
-        }
-
-        function updateUserStatus() {
-            const statusElement = $('#userStatus');
-            
-            if (isLoggedIn) {
-                statusElement.removeClass('logged-out').addClass('logged-in');
-                statusElement.html('<i class="fas fa-user-check"></i> Welcome Back!');
-            } else {
-                statusElement.removeClass('logged-in').addClass('logged-out');
-                statusElement.html('<i class="fas fa-user-slash"></i> Not Logged In');
-            }
-        }
-
-        // Function to simulate login (for testing purposes)
-       function simulateLogin() {
-    isLoggedIn = true;
-    updateUserStatus();
-    closeLoginPrompt();
-
-    const currentProducts = currentCategory === 'all'
-        ? allProducts
-        : allProducts.filter(product => product.category === currentCategory);
-
-    renderProducts(currentProducts);
-            
-            // Show success message
-            const notification = $('#cartNotification');
-            notification.find('i').attr('class', 'fas fa-sign-in-alt');
-            notification.find('text').text('Successfully logged in!');
-            notification.addClass('show');
-            
-            setTimeout(() => {
-                notification.removeClass('show');
-            }, 3000);
-        }
-
-        // Function to send cart data to Node.js backend
-        function sendCartToServer(cartData) {
-            // Example implementation - replace with your actual endpoint
-            $.ajax({
-                url: '/api/cart',
-                method: 'POST',
-                data: JSON.stringify(cartData),
-                contentType: 'application/json',
-                success: function(response) {
-                    console.log('Cart updated on server:', response);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error updating cart:', error);
+                                if (loadedCount === endpoints.length) {
+                                    $('#loading').hide();
+                                    $('#error').show().text('Failed to load some products. Please try again later.');
+                                }
+                            }
+                        });
+                    });
                 }
+
+                // Display products in grid
+                function displayProducts(products) {
+                    const container = $('#products-container');
+                    container.empty();
+
+                    if (products.length === 0) {
+                        container.html('<div class="no-products">No products found matching your criteria.</div>');
+                        return;
+                    }
+
+                    products.forEach(product => {
+                        const productCard = createProductCard(product);
+                        container.append(productCard);
+                    });
+                }
+
+                // Create product card HTML
+                function createProductCard(product) {
+                    const imageUrl = product.image || product.image_url || product.img_path ||
+                        'https://via.placeholder.com/300x250.png?text=No+Image';
+
+                    const price = product.price ? `$${parseFloat(product.price).toFixed(2)}` : 'Price not available';
+                    const category = product.category || 'Uncategorized';
+                    const description = product.description || 'No description available';
+                    const name = product.name || 'Unknown Product';
+
+                    return `
+                    <div class="product-card" data-product-id="${product.id}">
+                        <img src="${imageUrl}" alt="${name}" class="product-image" 
+                             onerror="this.src='https://via.placeholder.com/300x250/D2B48C/654321?text=No+Image'">
+                        <div class="product-info">
+                            <div class="product-category">${category}</div>
+                            <h3 class="product-name">${name}</h3>
+                            <p class="product-description">${description}</p>
+                            <div class="product-price">${price}</div>
+                            <button class="btn add-to-cart" data-product-id="${product.id}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                }
+
+                // Populate filter options
+                function populateFilters() {
+                    const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+                    const categorySelect = $('#categoryFilter');
+
+                    categories.forEach(category => {
+                        categorySelect.append(`<option value="${category}">${category}</option>`);
+                    });
+                }
+
+                // Filter products
+                function filterProducts() {
+                    const categoryFilter = $('#categoryFilter').val();
+                    const priceFilter = parseFloat($('#priceFilter').val());
+                    const searchFilter = $('#searchFilter').val().toLowerCase();
+
+                    filteredProducts = allProducts.filter(product => {
+                        const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                        const matchesPrice = !priceFilter || parseFloat(product.price) <= priceFilter;
+                        const matchesSearch = !searchFilter ||
+                            product.name.toLowerCase().includes(searchFilter) ||
+                            product.description.toLowerCase().includes(searchFilter);
+
+                        return matchesCategory && matchesPrice && matchesSearch;
+                    });
+
+                    displayProducts(filteredProducts);
+                }
+
+                // Event listeners for filters
+                $('#categoryFilter, #priceFilter, #searchFilter').on('change keyup', filterProducts);
+
+                // Add to cart functionality
+                $(document).on('click', '.add-to-cart', function () {
+                    const productId = $(this).data('product-id');
+                    addToCart(productId);
+                });
+
+                // Add to cart function
+                function addToCart(productId) {
+                    $.ajax({
+                        url: '/api/cart/add',
+                        method: 'POST',
+                        data: { productId: productId },
+                        success: function (response) {
+                            // Show success message
+                            const btn = $(`.add-to-cart[data-product-id="${productId}"]`);
+                            const originalText = btn.text();
+                            btn.text('Added!').css('background', 'var(--success-green)');
+
+                            setTimeout(() => {
+                                btn.text(originalText).css('background', '');
+                            }, 2000);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error adding to cart:', error);
+                            alert('Failed to add product to cart. Please try again.');
+                        }
+                    });
+                }
+
+                // Initialize
+                loadProducts();
             });
-        }
+        </script>
+    </body>
 
-       function loadProductsFromServer() {
-    $.ajax({
-        url: '/api/products/wearables', 
-        method: 'GET',
-        success: function(products) {
-            allProducts = products; // 👈 store for filtering
-            renderProducts(allProducts);
-        },
-        error: function(xhr, status, error) {
-            console.error('Error loading products:', error);
-            $('#productsGrid').html('<p>Failed to load products.</p>');
-        }
-    });
-}
-
-
-    </script>
-</body>
 </html>

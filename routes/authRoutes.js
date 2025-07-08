@@ -22,56 +22,105 @@ db.connect((err) => {
 });
 
 // LOGIN
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
+    console.log('📩 Login attempt with:', email, password);
 
-    db.query('SELECT * FROM user WHERE email = ?', [email], async (err, results) => {
-        if (err) return res.status(500).send('Database error');
-        if (results.length === 0) return res.status(401).send('Invalid email or password');
+    if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    try {
+        const [results] = await db.promise().query(
+            'SELECT * FROM user WHERE email = ?',
+            [email.trim().toLowerCase()]
+        );
+
+        console.log('🧾 Query result:', results);
+
+        if (results.length === 0) {
+            console.log('❌ No user found for this email');
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
 
         const user = results[0];
-      const inputPassword = password.trim();
-const storedHash = user.password.trim(); // In case it has trailing whitespace
-const match = await bcrypt.compare(inputPassword, storedHash);
+        console.log('🔐 Stored hash:', user.password);
 
+        const isMatch = await bcrypt.compare(password.trim(), user.password);
+        console.log('🔍 Password match:', isMatch);
 
-        if (!match) return res.status(401).send('Invalid email or password');
+        if (!isMatch) {
+            console.log('❌ Password mismatch');
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
 
-        const token = jwt.sign({ user_id: user.user_id, email: user.email }, 'bunbun_secret', {
-            expiresIn: '2h',
+        const token = jwt.sign(
+            { user_id: user.user_id, email: user.email },
+            process.env.JWT_SECRET || 'bunbun_secret',
+            { expiresIn: '2h' }
+        );
+
+        console.log('✅ Login successful');
+        res.json({
+            token,
+            user: {
+                id: user.user_id,
+                fname: user.fname,
+                lname: user.lname,
+                email: user.email
+            }
         });
 
-        res.json({ token, user: { fname: user.fname, email: user.email } });
-    });
+    } catch (err) {
+        console.error('🔥 Login error:', err);
+        res.status(500).json({ error: 'Server error during login' });
+    }
 });
 
 // SIGN UP
 router.post('/signup', async (req, res) => {
     const { fname, lname, email, password } = req.body;
-    const hashed = await bcrypt.hash(password, 10);
 
-    const checkQuery = 'SELECT * FROM user WHERE email = ?';
-    db.query(checkQuery, [email], (err, results) => {
-        if (err) {
-            console.error("Error checking email:", err);
-            return res.status(500).send('Signup failed');
+    if (!fname || !email || !password) {
+        return res.status(400).json({
+            error: 'Required fields missing'
+        });
+    }
+
+    try {
+        // Check if user exists
+        const [existing] = await db.promise().query(
+            'SELECT * FROM user WHERE email = ?',
+            [email.trim().toLowerCase()]
+        );
+
+        if (existing.length > 0) {
+            return res.status(409).json({
+                error: 'Email already registered'
+            });
         }
 
-        if (results.length > 0) return res.status(409).send('Email already used');
+        const hashed = await bcrypt.hash(password.trim(), 10);
 
-        const sql = `
-      INSERT INTO user (fname, lname, email, password, address, contact_number, user_img, role_id, status_id)
-      VALUES (?, ?, ?, ?, 'N/A', '0000', '', 2, 1)
-    `;
-        db.query(sql, [fname, lname, email, hashed], (err2, result) => {
-            if (err2) {
-                console.error("Error inserting user:", err2);
-                return res.status(500).send('Signup failed');
-            }
-            res.send('Account created');
+
+        const [result] = await db.promise().query(
+            `INSERT INTO user 
+            (fname, lname, email, password, address, contact_number, user_img, role_id, status_id)
+            VALUES (?, ?, ?, ?, 'N/A', '0000', '', 2, 1)`,
+            [fname.trim(), lname?.trim(), email.trim().toLowerCase(), hashed]
+        );
+
+        res.status(201).json({
+            message: 'Account created successfully',
+            userId: result.insertId
         });
-    });
-});
 
+    } catch (err) {
+        console.error('Signup error:', err);
+        res.status(500).json({
+            error: 'Account creation failed'
+        });
+    }
+});
 
 module.exports = router;

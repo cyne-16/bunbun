@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - BunBun Crochet Shop</title>
-    <link rel="stylesheet" href="css/style.css" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <style>
@@ -84,7 +84,7 @@
             border-radius: 50%;
             border: 3px solid var(--warm-white);
             transition: transform 0.3s ease;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
         }
 
         .logo img:hover {
@@ -120,7 +120,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
 
@@ -129,9 +129,9 @@
         }
 
         #nav-icons a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
         }
 
         /* Main Content */
@@ -145,7 +145,7 @@
         }
 
         .form-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 3rem;
             box-shadow: 0 20px 40px rgba(139, 69, 19, 0.2);
@@ -157,7 +157,7 @@
             animation: slideUp 0.8s ease-out forwards;
             animation-delay: 0.3s;
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         @keyframes slideUp {
@@ -172,7 +172,7 @@
             color: var(--primary-brown);
             font-size: 2.2rem;
             margin-bottom: 2rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             transform: translateY(20px);
             opacity: 0;
             animation: fadeInTitle 0.8s ease-out forwards;
@@ -194,9 +194,17 @@
             animation: slideInInputs 0.6s ease-out forwards;
         }
 
-        .input-group:nth-child(3) { animation-delay: 0.7s; }
-        .input-group:nth-child(4) { animation-delay: 0.8s; }
-        .input-group:nth-child(5) { animation-delay: 0.9s; }
+        .input-group:nth-child(3) {
+            animation-delay: 0.7s;
+        }
+
+        .input-group:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .input-group:nth-child(5) {
+            animation-delay: 0.9s;
+        }
 
         @keyframes slideInInputs {
             to {
@@ -212,7 +220,7 @@
             border-radius: 50px;
             font-size: 1.1rem;
             font-family: 'Georgia', serif;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255, 255, 255, 0.9);
             color: var(--dark-brown);
             transition: all 0.3s ease;
             outline: none;
@@ -222,7 +230,7 @@
             border-color: var(--primary-brown);
             box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
             transform: translateY(-2px);
-            background: rgba(255,255,255,1);
+            background: rgba(255, 255, 255, 1);
         }
 
         .form-container input::placeholder {
@@ -240,9 +248,19 @@
         }
 
         @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
         }
 
         .error-message {
@@ -328,7 +346,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             transition: left 0.5s ease;
         }
 
@@ -416,7 +434,9 @@
         }
 
         @keyframes spin {
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
         /* Success Message */
@@ -506,17 +526,27 @@
             animation: float 6s linear infinite;
         }
 
+        .emoji-icon {
+            width: 80px;
+            height: 80px;
+            vertical-align: middle;
+        }
+
+
         @keyframes float {
             0% {
                 transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
             }
+
             10% {
                 opacity: 0.6;
             }
+
             90% {
                 opacity: 0.6;
             }
+
             100% {
                 transform: translateY(-100px) rotate(360deg);
                 opacity: 0;
@@ -538,7 +568,7 @@
     <header>
         <div class="header-content">
             <div class="logo">
-                <img src="images/bunbun.png" alt="BunBun Logo">
+
                 <h1>BunBun Threads</h1>
             </div>
             <nav id="nav-icons">
@@ -553,14 +583,15 @@
             <div class="success-message" id="successMessage">
                 <i class="fas fa-check-circle"></i> Login successful! Welcome back!
             </div>
-            
-            <h2>Welcome Back! 🐰</h2>
-            
+
+            <h2>Welcome Back! <img src="images/bunbun.png" alt="Bunny" class="emoji-icon"></h2>
+
+
             <div class="input-group">
                 <input type="email" id="loginEmail" placeholder="Email Address" required>
                 <div class="error-message" id="emailError"></div>
             </div>
-            
+
             <div class="input-group">
                 <input type="password" id="loginPassword" placeholder="Password" required>
                 <div class="error-message" id="passwordError"></div>
@@ -568,175 +599,176 @@
                     <a href="#" id="forgotPasswordLink">Forgot Password?</a>
                 </div>
             </div>
-            
+
             <div class="remember-me">
                 <input type="checkbox" id="rememberMe">
                 <label for="rememberMe">Remember me</label>
             </div>
-            
+
             <button id="submitLogin">
                 <span class="button-text">Login</span>
                 <div class="loading"></div>
             </button>
-            
+
             <div class="signup-link">
                 Don't have an account? <a href="signup.html">Sign up here</a>
             </div>
         </div>
     </main>
 
-   <script>
-    $(document).ready(function() {
-        // Create floating particles
-        function createParticle() {
-            const particle = $('<div class="particle"></div>');
-            particle.css({
-                left: Math.random() * 100 + '%',
-                animationDelay: Math.random() * 2 + 's',
-                animationDuration: (Math.random() * 3 + 4) + 's'
-            });
-            $('body').append(particle);
-            setTimeout(() => particle.remove(), 7000);
-        }
-
-        setInterval(createParticle, 2000);
-
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        function validatePassword(password) {
-            return password.length >= 8;
-        }
-
-        function showError(inputId, message) {
-            const input = $('#' + inputId);
-            const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
-            input.addClass('error').removeClass('success');
-            errorDiv.text(message).addClass('show');
-            setTimeout(() => input.removeClass('error'), 500);
-        }
-
-        function showSuccess(inputId) {
-            const input = $('#' + inputId);
-            const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
-            input.addClass('success').removeClass('error');
-            errorDiv.removeClass('show');
-        }
-
-        $('#loginEmail').on('input blur', function() {
-            const value = $(this).val();
-            if (value && !validateEmail(value)) {
-                showError('loginEmail', 'Please enter a valid email address');
-            } else if (value) {
-                showSuccess('loginEmail');
-            }
-        });
-
-        $('#loginPassword').on('input blur', function() {
-            const value = $(this).val();
-            if (value && !validatePassword(value)) {
-                showError('loginPassword', 'Password must be at least 8 characters long');
-            } else if (value) {
-                showSuccess('loginPassword');
-            }
-        });
-
-        $('#forgotPasswordLink').on('click', function(e) {
-            e.preventDefault();
-            const email = $('#loginEmail').val();
-
-            if (!email) {
-                showError('loginEmail', 'Please enter your email address first');
-                $('#loginEmail').focus();
-                return;
-            }
-
-            if (!validateEmail(email)) {
-                showError('loginEmail', 'Please enter a valid email address');
-                $('#loginEmail').focus();
-                return;
-            }
-
-            alert('Password reset instructions have been sent to your email address.');
-        });
-
-        $("#submitLogin").on("click", function (e) {
-            e.preventDefault();
-
-            const email = $("#loginEmail").val();
-            const password = $("#loginPassword").val();
-            const rememberMe = $("#rememberMe").is(':checked');
-            let isValid = true;
-
-            if (!email || !validateEmail(email)) {
-                showError('loginEmail', 'Please enter a valid email address');
-                isValid = false;
-            }
-
-            if (!password || !validatePassword(password)) {
-                showError('loginPassword', 'Password must be at least 8 characters long');
-                isValid = false;
-            }
-
-            if (!isValid) return;
-
-            const button = $(this);
-            const buttonText = button.find('.button-text');
-            const loading = button.find('.loading');
-
-            button.prop('disabled', true);
-            buttonText.text('Signing In...');
-            loading.show();
-
-            const credentials = { email, password };
-
-            setTimeout(() => {
-                $.ajax({
-                    url: "/api/auth/login",
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(credentials),
-                    success: function (response) {
-                        $('#successMessage').addClass('show');
-                        setTimeout(() => {
-                            window.location.href = "index.html";
-                        }, 2000);
-                    },
-                    error: function (xhr) {
-                        let errorMessage = "Login failed. Please try again.";
-                        if (xhr.status === 401) {
-                            errorMessage = "Invalid email or password.";
-                            showError('loginPassword', errorMessage);
-                        } else if (xhr.status === 404) {
-                            errorMessage = "Account not found. Please sign up first.";
-                            showError('loginEmail', errorMessage);
-                        } else {
-                            alert(errorMessage);
-                        }
-                    },
-                    complete: function () {
-                        button.prop('disabled', false);
-                        buttonText.text('Login');
-                        loading.hide();
-                    }
+    <script>
+        $(document).ready(function () {
+            // Create floating particles
+            function createParticle() {
+                const particle = $('<div class="particle"></div>');
+                particle.css({
+                    left: Math.random() * 100 + '%',
+                    animationDelay: Math.random() * 2 + 's',
+                    animationDuration: (Math.random() * 3 + 4) + 's'
                 });
-            }, 1000);
-        });
-
-        // Enter key submission
-        $('.form-container input').keypress(function(e) {
-            if (e.which === 13) {
-                $('#submitLogin').click();
+                $('body').append(particle);
+                setTimeout(() => particle.remove(), 7000);
             }
-        });
 
-        // Auto-focus
-        $('#loginEmail').focus();
-    });
-</script>
+            setInterval(createParticle, 2000);
+
+            function validateEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function validatePassword(password) {
+                return password.length >= 8;
+            }
+
+            function showError(inputId, message) {
+                const input = $('#' + inputId);
+                const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
+                input.addClass('error').removeClass('success');
+                errorDiv.text(message).addClass('show');
+                setTimeout(() => input.removeClass('error'), 500);
+            }
+
+            function showSuccess(inputId) {
+                const input = $('#' + inputId);
+                const errorDiv = $('#' + inputId.replace('login', '').toLowerCase() + 'Error');
+                input.addClass('success').removeClass('error');
+                errorDiv.removeClass('show');
+            }
+
+            $('#loginEmail').on('input blur', function () {
+                const value = $(this).val();
+                if (value && !validateEmail(value)) {
+                    showError('loginEmail', 'Please enter a valid email address');
+                } else if (value) {
+                    showSuccess('loginEmail');
+                }
+            });
+
+            $('#loginPassword').on('input blur', function () {
+                const value = $(this).val();
+                if (value && !validatePassword(value)) {
+                    showError('loginPassword', 'Password must be at least 8 characters long');
+                } else if (value) {
+                    showSuccess('loginPassword');
+                }
+            });
+
+            $('#forgotPasswordLink').on('click', function (e) {
+                e.preventDefault();
+                const email = $('#loginEmail').val();
+
+                if (!email) {
+                    showError('loginEmail', 'Please enter your email address first');
+                    $('#loginEmail').focus();
+                    return;
+                }
+
+                if (!validateEmail(email)) {
+                    showError('loginEmail', 'Please enter a valid email address');
+                    $('#loginEmail').focus();
+                    return;
+                }
+
+                alert('Password reset instructions have been sent to your email address.');
+            });
+
+            $("#submitLogin").on("click", function (e) {
+                e.preventDefault();
+
+                const email = $("#loginEmail").val();
+                const password = $("#loginPassword").val();
+                const rememberMe = $("#rememberMe").is(':checked');
+                let isValid = true;
+
+                if (!email || !validateEmail(email)) {
+                    showError('loginEmail', 'Please enter a valid email address');
+                    isValid = false;
+                }
+
+                if (!password || !validatePassword(password)) {
+                    showError('loginPassword', 'Password must be at least 8 characters long');
+                    isValid = false;
+                }
+
+                if (!isValid) return;
+
+                const button = $(this);
+                const buttonText = button.find('.button-text');
+                const loading = button.find('.loading');
+
+                button.prop('disabled', true);
+                buttonText.text('Signing In...');
+                loading.show();
+
+                const credentials = { email, password };
+
+                setTimeout(() => {
+                    $.ajax({
+                        url: "/api/auth/login",
+                        method: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            email: email.trim().toLowerCase(),
+                            password: password.trim()
+                        }),
+                        success: function (response) {
+                            // Store the token
+                            localStorage.setItem('authToken', response.token);
+                            $('#successMessage').addClass('show');
+                            setTimeout(() => {
+                                window.location.href = "home.html";
+                            }, 2000);
+                        },
+                        error: function (xhr) {
+                            const error = xhr.responseJSON?.error || "Login failed";
+                            if (xhr.status === 401) {
+                                showError('loginPassword', error);
+                            } else {
+                                alert(error);
+                            }
+                        },
+                        complete: function () {
+                            button.prop('disabled', false);
+                            buttonText.text('Login');
+                            loading.hide();
+                        }
+                    });
+                }, 1000);
+            });
+
+            // Enter key submission
+            $('.form-container input').keypress(function (e) {
+                if (e.which === 13) {
+                    $('#submitLogin').click();
+                }
+            });
+
+            // Auto-focus
+            $('#loginEmail').focus();
+        });
+    </script>
 
 </body>
-        
+
 </html>

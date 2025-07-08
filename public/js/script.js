@@ -337,18 +337,21 @@ function slideProducts(section, direction) {
 }
 
 function updateIndicators(section) {
-  const indicators = document.getElementById(`${section}-indicators`);
   const grid = document.getElementById(`${section}-grid`);
+  const indicators = document.getElementById(`${section}-indicators`);
+
+  if (!grid || !indicators) return; // 🛑 Safeguard
+
   const cards = grid.querySelectorAll('.product-card');
-  
+
   if (cards.length === 0) return;
-  
+
   const visibleCards = Math.floor(grid.clientWidth / (cards[0].offsetWidth + 32));
   const totalSlides = Math.max(1, cards.length - visibleCards + 1);
-  
+
   // Clear existing indicators
   indicators.innerHTML = '';
-  
+
   // Create new indicators
   for (let i = 0; i < totalSlides; i++) {
     const indicator = document.createElement('div');
@@ -360,6 +363,7 @@ function updateIndicators(section) {
     indicators.appendChild(indicator);
   }
 }
+
 
 function goToSlide(section, slideIndex) {
   const grid = document.getElementById(`${section}-grid`);
