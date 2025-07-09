@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BunBun Threads</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="images/bunbun.png" alt="BunBun Logo">
+                <h1>BunBun Threads</h1>
+            </div>
+            <nav id="nav-icons">
+                <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+                <a href="#" title="About"><i class="fas fa-info-circle"></i></a>
+                <a href="#" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#" title="Profile"><i class="fas fa-user"></i></a>
+            </nav>
+        </div>
+    </header>
+
+
+
+
+    <style>
+        :root {
+            --primary-brown: #8B4513;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --cream: #F5F5DC;
+            --warm-white: #FFF8E7;
+            --soft-brown: #DEB887;
+            --accent-brown: #A0522D;
+            --error-red: #E74C3C;
+            --success-green: #27AE60;
+        }
+
+        main {
+            margin-top: 100px;
+            padding: 2rem 0;
+            min-height: calc(100vh - 100px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: var(--dark-brown);
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-brown) 0%, var(--dark-brown) 100%);
+            color: var(--warm-white);
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+            height: 100px;
+            transform: translateY(-100%);
+            animation: slideDown 0.8s ease-out forwards;
+        }
+
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        header .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            height: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            height: 80px;
+            width: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--warm-white);
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        .logo img:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        #nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        #nav-icons a {
+            color: var(--warm-white);
+            text-decoration: none;
+            font-size: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #nav-icons a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        #nav-icons a:hover::before {
+            left: 100%;
+        }
+
+        #nav-icons a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+            min-height: 100vh;
+            color: var(--dark-brown);
+            line-height: 1.6;
+            margin-top: 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            background: white;
+            border: 2px solid var(--soft-brown);
+            color: var(--primary-brown);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(139, 69, 19, 0.3);
+        }
+
+        .header h1 {
+            color: var(--primary-brown);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            color: var(--accent-brown);
+            font-size: 1.1rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: var(--primary-brown);
+        }
+
+        .spinner {
+            border: 4px solid var(--light-brown);
+            border-top: 4px solid var(--primary-brown);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 100px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: var(--warm-white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.15);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            height: 520px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.25);
+            border-color: var(--soft-brown);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-brown);
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            color: var(--dark-brown);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-brown);
+            margin-bottom: 15px;
+        }
+
+        .product-category {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--light-brown), var(--soft-brown));
+            color: var(--dark-brown);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--primary-brown) 0%, var(--accent-brown) 100%);
+            color: var(--warm-white);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+
+        .error-message {
+            background: var(--error-red);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 50px;
+            color: var(--primary-brown);
+            font-size: 1.2rem;
+        }
+
+        .filters {
+            background: var(--cream);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: var(--dark-brown);
+            font-size: 0.9rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 8px 12px;
+            border: 2px solid var(--light-brown);
+            border-radius: 8px;
+            background: var(--warm-white);
+            color: var(--dark-brown);
+            font-size: 0.9rem;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary-brown);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="header">
+                <img src="images/bunbun.png" alt="BunBun Logo" style="width: 200px;height:200px;">
+                <h1>BunBun Threads</h1>
+                <p>Handcrafted Customizable Products</p>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading beautiful decor products...</p>
+            </div>
+
+            <div id="error" class="error-message" style="display: none;"></div>
+
+            <div id="products-container" class="products-grid"></div>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+                let allProducts = [];
+                let filteredProducts = [];
+
+                // Load products from backend
+                function loadProducts() {
+                    const endpoints = ['/api/products/custom'];
+                    let loadedCount = 0;
+                    allProducts = [];
+
+                    endpoints.forEach(endpoint => {
+                        $.ajax({
+                            url: endpoint,
+                            method: 'GET',
+                            success: function (data) {
+                                allProducts = allProducts.concat(data);
+                                loadedCount++;
+
+                                if (loadedCount === endpoints.length) {
+                                    // All endpoints loaded
+                                    filteredProducts = [...allProducts];
+                                    displayProducts(filteredProducts);
+                                    populateFilters();
+                                    $('#loading').hide();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error('Error loading products from ' + endpoint + ':', error);
+                                loadedCount++;
+
+                                if (loadedCount === endpoints.length) {
+                                    $('#loading').hide();
+                                    $('#error').show().text('Failed to load some products. Please try again later.');
+                                }
+                            }
+                        });
+                    });
+                }
+
+                function displayProducts(products) {
+                    const container = $('#products-container');
+                    container.empty();
+
+                    if (products.length === 0) {
+                        container.html('<div class="no-products">No products found matching your criteria.</div>');
+                        return;
+                    }
+
+                    products.forEach(product => {
+                        const productCard = createProductCard(product);
+                        container.append(productCard);
+                    });
+                }
+
+                // Create product card HTML
+                function createProductCard(product) {
+                    const imageUrl = product.image || product.image_url || product.img_path ||
+                        'https://via.placeholder.com/300x250.png?text=No+Image';
+
+                    const price = product.price ? `$${parseFloat(product.price).toFixed(2)}` : 'Price not available';
+                    const category = product.category || 'Uncategorized';
+                    const description = product.description || 'No description available';
+                    const name = product.name || 'Unknown Product';
+
+                    return `
+                    <div class="product-card" data-product-id="${product.id}">
+                        <img src="${imageUrl}" alt="${name}" class="product-image" 
+                             onerror="this.src='https://via.placeholder.com/300x250/D2B48C/654321?text=No+Image'">
+                        <div class="product-info">
+                            <div class="product-category">${category}</div>
+                            <h3 class="product-name">${name}</h3>
+                            <p class="product-description">${description}</p>
+                            <div class="product-price">${price}</div>
+                            <button class="btn add-to-cart" data-product-id="${product.id}">
+                                Add to Cart
+                            </button>
+                        </div>
+                    </div>
+                `;
+                }
+
+                function populateFilters() {
+                    const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+                    const categorySelect = $('#categoryFilter');
+
+                    categories.forEach(category => {
+                        categorySelect.append(`<option value="${category}">${category}</option>`);
+                    });
+                }
+
+                // Filter products
+                function filterProducts() {
+                    const categoryFilter = $('#categoryFilter').val();
+                    const priceFilter = parseFloat($('#priceFilter').val());
+                    const searchFilter = $('#searchFilter').val().toLowerCase();
+
+                    filteredProducts = allProducts.filter(product => {
+                        const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                        const matchesPrice = !priceFilter || parseFloat(product.price) <= priceFilter;
+                        const matchesSearch = !searchFilter ||
+                            product.name.toLowerCase().includes(searchFilter) ||
+                            product.description.toLowerCase().includes(searchFilter);
+
+                        return matchesCategory && matchesPrice && matchesSearch;
+                    });
+
+                    displayProducts(filteredProducts);
+                }
+
+                $('#categoryFilter, #priceFilter, #searchFilter').on('change keyup', filterProducts);
+
+                $(document).on('click', '.add-to-cart', function () {
+                    const productId = $(this).data('product-id');
+                    addToCart(productId);
+                });
+
+             
+                function addToCart(productId) {
+                    $.ajax({
+                        url: '/api/cart/add',
+                        method: 'POST',
+                        data: { productId: productId },
+                        success: function (response) {
+                          
+                            const btn = $(`.add-to-cart[data-product-id="${productId}"]`);
+                            const originalText = btn.text();
+                            btn.text('Added!').css('background', 'var(--success-green)');
+
+                            setTimeout(() => {
+                                btn.text(originalText).css('background', '');
+                            }, 2000);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error adding to cart:', error);
+                            alert('Failed to add product to cart. Please try again.');
+                        }
+                    });
+                }
+
+             
+                loadProducts();
+            });
+        </script>
+    </body>
+
+</html>
