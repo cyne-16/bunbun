@@ -39,18 +39,22 @@ $(document).ready(function () {
             <i class="fas fa-shopping-cart"></i>
             Add to Cart
           </button>
+          <br>
+          <a href="product-details.html?id=${product.id}" class="view-more-btn">
+            <i class="fas fa-info-circle"></i> View More
+          </a>
         </div>
       </div>
     `;
     }
 
-    // Helper function to truncate text
+
     function truncateText(text, maxLength) {
         if (!text) return '';
         return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
     }
 
-    // Load NEW ARRIVALS (category_id = 4)
+
     fetch('/api/products/new')
         .then(res => res.json())
         .then(data => {
@@ -75,7 +79,7 @@ $(document).ready(function () {
             $('#new-grid').html('<div class="error-message"><p>Error loading new arrivals.</p></div>');
         });
 
-    // Load POPULAR ITEMS (category_id = 5)
+
     fetch('/api/products/popular')
         .then(res => res.json())
         .then(data => {
@@ -125,7 +129,7 @@ $(document).ready(function () {
             showProductModal(productId);
         });
 
-        // Product card hover effects
+
         $('.product-card').off('mouseenter mouseleave').on({
             mouseenter: function () {
                 $(this).addClass('hovered');
@@ -136,7 +140,7 @@ $(document).ready(function () {
         });
     }
 
-    // Add to cart function
+
     function addToCart(productId, button) {
         const token = localStorage.getItem("bunbun_token");
 
@@ -230,11 +234,11 @@ $(document).ready(function () {
         });
     }
 
-    // Show product modal (for quick view)
+
     function showProductModal(productId) {
-        // Fetch product details
+
         $.ajax({
-            url: `/api/products/${productId}`,
+            url: `/api/products/details/${productId}`,
             method: 'GET',
             success: function (product) {
                 const modal = $(`
@@ -433,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Animate elements when they come into view
+
 const animateOnScroll = () => {
     const elements = document.querySelectorAll('.fade-in, .slide-up, .slide-left, .slide-right');
 

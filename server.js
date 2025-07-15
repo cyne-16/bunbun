@@ -3,11 +3,11 @@ const path = require('path');
 const app = express();
 
 
-// Serve static files (HTML, CSS, JS, Images)
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json()); // Required to parse JSON request bodies
 
-// Use product routes
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+
+
 const productRoutes = require('./routes/productRoutes');
 app.use('/api/products', productRoutes);
 
@@ -16,6 +16,15 @@ app.use(express.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/authRoutes');
 app.use('/api/auth', authRoutes);
+
+app.get('/api/test/:id', (req, res) => {
+    console.log("🛠️ test route hit", req.params.id);
+    res.json({ test: 'ok', id: req.params.id });
+});
+
+
+
+
 
 
 // Server

@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BunBun Threads</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="js/script.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="images/bunbun.png" alt="BunBun Logo">
+                <h1>Product Details</h1>
+            </div>
+            <nav id="nav-icons">
+                <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+                <a href="#" title="About"><i class="fas fa-info-circle"></i></a>
+                <a href="#" title="Cart"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#" title="Profile"><i class="fas fa-user"></i></a>
+            </nav>
+        </div>
+    </header>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-brown: #8B4513;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --cream: #F5F5DC;
+            --warm-white: #FFF8E7;
+            --soft-brown: #DEB887;
+            --accent-brown: #A0522D;
+            --error-red: #E74C3C;
+            --success-green: #27AE60;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--light-brown) 0%, var(--soft-brown) 100%);
+            min-height: 100vh;
+            color: var(--dark-brown);
+            overflow-x: hidden;
+        }
+
+      
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        #product-details-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            background: rgba(255, 248, 231, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(139, 69, 19, 0.1);
+            border: 1px solid rgba(210, 180, 140, 0.3);
+        }
+
+       
+        .product-images {
+            position: relative;
+        }
+
+        .slider-container {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.15);
+            background: var(--cream);
+        }
+
+        .slider-wrapper {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            background: var(--warm-white);
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 248, 231, 0.9);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.1);
+            color: var(--dark-brown);
+        }
+
+        .slider-nav:hover {
+            background: var(--warm-white);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-nav.prev {
+            left: 15px;
+        }
+
+        .slider-nav.next {
+            right: 15px;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(139, 69, 19, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: linear-gradient(45deg, var(--primary-brown), var(--accent-brown));
+            transform: scale(1.2);
+        }
+
+      
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        #product-name {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        #product-description {
+            font-size: 1.1rem;
+            color: var(--primary-brown);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        #product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-brown), var(--accent-brown));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quantity-selector label {
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            background: var(--cream);
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .quantity-btn {
+            background: none;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--dark-brown);
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--light-brown);
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: none;
+            background: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark-brown);
+        }
+
+        #add-to-cart-btn {
+            background: linear-gradient(45deg, var(--primary-brown), var(--accent-brown));
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(139, 69, 19, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #add-to-cart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(139, 69, 19, 0.4);
+        }
+
+        #add-to-cart-btn:active {
+            transform: translateY(-1px);
+        }
+
+        #add-to-cart-btn i {
+            margin-right: 10px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(101, 67, 33, 0.95);
+            color: white;
+            margin-top: 60px;
+            backdrop-filter: blur(20px);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 15px;
+            color: var(--soft-brown);
+        }
+
+        .footer-section p {
+            margin-bottom: 8px;
+            color: var(--light-brown);
+        }
+
+        .footer-section a {
+            color: var(--light-brown);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--soft-brown);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: linear-gradient(45deg, var(--primary-brown), var(--accent-brown));
+            transform: translateY(-2px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(210, 180, 140, 0.2);
+            color: var(--light-brown);
+        }
+
+      
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(139, 69, 19, 0.1);
+            border-top: 4px solid var(--primary-brown);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 40px;
+            color: var(--error-red);
+            font-size: 1.2rem;
+        }
+
+        .product-loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        @media (max-width: 768px) {
+            #product-details-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 20px;
+            }
+
+            .header-content {
+                padding: 1rem;
+            }
+
+            .logo h1 {
+                font-size: 1.2rem;
+            }
+
+            #product-name {
+                font-size: 2rem;
+            }
+
+            .slider-wrapper {
+                height: 300px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+    </head>
+
+    <body>
+
+        <div class="container">
+          
+            <div class="product-loading" id="product-loading">
+                <div class="spinner"></div>
+                <p>Loading product details...</p>
+            </div>
+
+            <div class="error-message" id="error-message" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Error loading product details. Please try again.</p>
+            </div>
+
+            <div id="product-details-container" style="display: none;">
+                <div class="product-images">
+                    <div class="slider-container">
+                        <div class="slider-wrapper">
+                            <div class="slide active">
+                                <img id="main-image" src="" alt="Product Image 1">
+                            </div>
+            
+                            <div class="slide">
+                                <img id="image2" src="" alt="Product Image 3">
+                            </div>
+                             <div class="slide">
+                                <img id="image3" src="" alt="Product Image 3">
+                            </div>
+                        </div>
+                        <button class="slider-nav prev">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="slider-nav next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="slider-dots">
+                        <span class="dot active" data-slide="0"></span>
+                        <span class="dot" data-slide="1"></span>
+                        <span class="dot" data-slide="2"></span>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h2 id="product-name">Loading...</h2>
+                    <p id="product-description">Loading product description...</p>
+                    <div id="product-price">₱0.00</div>
+
+                    <div class="quantity-selector">
+                        <label>Quantity:</label>
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" id="decrease-qty">-</button>
+                            <input type="number" class="quantity-input" id="quantity" value="1" min="1" max="10">
+                            <button class="quantity-btn" id="increase-qty">+</button>
+                        </div>
+                    </div>
+
+                    <button id="add-to-cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About BunBun Crochet</h3>
+                    <p>We create beautiful, handmade crochet pieces with love and attention to detail. Every item is
+                        crafted with care to bring warmth and joy to your life.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#">Home</a></p>
+                    <p><a href="#">About Us</a></p>
+                    <p><a href="#">Shop</a></p>
+                    <p><a href="#">Custom Orders</a></p>
+                    <p><a href="#">Contact</a></p>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <p>Follow us for updates and new arrivals!</p>
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 BunBun Crochet Shop. All rights reserved. Made with ❤️ for crochet lovers.</p>
+            </div>
+        </footer>
+
+        <script>
+            $(document).ready(function () {
+                let currentSlide = 0;
+                const slides = $('.slide');
+                const dots = $('.dot');
+                const totalSlides = slides.length;
+
+               
+                const params = new URLSearchParams(window.location.search);
+                const productId = params.get('id');
+
+                if (!productId) {
+                    showError('No product ID specified');
+                    return;
+                }
+
+              
+                function initSlider() {
+                    showSlide(0);
+                }
+
+                function showSlide(index) {
+                    slides.removeClass('active');
+                    dots.removeClass('active');
+
+                    slides.eq(index).addClass('active');
+                    dots.eq(index).addClass('active');
+
+                    currentSlide = index;
+                }
+
+            
+                function nextSlide() {
+                    const next = (currentSlide + 1) % totalSlides;
+                    showSlide(next);
+                }
+
+                function prevSlide() {
+                    const prev = (currentSlide - 1 + totalSlides) % totalSlides;
+                    showSlide(prev);
+                }
+
+                function showLoading() {
+                    $('#product-loading').show();
+                    $('#product-details-container').hide();
+                    $('#error-message').hide();
+                }
+
+              
+                function showError(message) {
+                    $('#product-loading').hide();
+                    $('#product-details-container').hide();
+                    $('#error-message').show();
+                    $('#error-message p').text(message || 'Error loading product details. Please try again.');
+                }
+
+                function showProduct() {
+                    $('#product-loading').hide();
+                    $('#error-message').hide();
+                    $('#product-details-container').show();
+                }
+
+                function loadProduct() {
+                    showLoading();
+
+                    $.ajax({
+                        url: `/api/products/details/${productId}`,
+                        method: 'GET',
+                        timeout: 10000, 
+                        success: function (product) {
+                            try {
+                                $('#product-name').text(product.name || 'Unknown Product');
+                                $('#product-description').text(product.description || 'No description available');
+                                $('#product-price').text(`₱${parseFloat(product.price || 0).toFixed(2)}`);
+
+                                const defaultImage = 'images/default.jpg';
+
+                               
+                                $('#main-image').attr('src', product.image_url || defaultImage);
+                                $('#image2').attr('src', product.image2 || defaultImage);
+                                $('#image3').attr('src', product.image3 || defaultImage);
+
+                               
+                                $('.slide img').on('error', function () {
+                                    $(this).attr('src', defaultImage);
+                                });
+
+                               
+                                showProduct();
+
+                               
+                                initSlider();
+
+                            } catch (error) {
+                                console.error('Error processing product data:', error);
+                                showError('Error processing product data');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('AJAX Error:', {
+                                status: status,
+                                error: error,
+                                responseText: xhr.responseText
+                            });
+
+                            let errorMessage = 'Error loading product details.';
+
+                            if (xhr.status === 404) {
+                                errorMessage = 'Product not found.';
+                            } else if (xhr.status === 500) {
+                                errorMessage = 'Server error. Please try again later.';
+                            } else if (status === 'timeout') {
+                                errorMessage = 'Request timed out. Please try again.';
+                            }
+
+                            showError(errorMessage);
+                        }
+                    });
+                }
+
+                let autoSlideInterval;
+                function startAutoSlide() {
+                    autoSlideInterval = setInterval(nextSlide, 5000);
+                }
+
+                
+                $('.slider-nav.next').click(nextSlide);
+                $('.slider-nav.prev').click(prevSlide);
+
+                $('.dot').click(function () {
+                    const slideIndex = $(this).data('slide');
+                    showSlide(slideIndex);
+                });
+
+           
+                $('#increase-qty').click(function () {
+                    const qty = parseInt($('#quantity').val());
+                    if (qty < 10) {
+                        $('#quantity').val(qty + 1);
+                    }
+                });
+
+                $('#decrease-qty').click(function () {
+                    const qty = parseInt($('#quantity').val());
+                    if (qty > 1) {
+                        $('#quantity').val(qty - 1);
+                    }
+                });
+
+                // Add to cart functionality
+                $('#add-to-cart-btn').click(function () {
+                    const btn = $(this);
+                    const originalText = btn.html();
+                    const quantity = parseInt($('#quantity').val());
+                    const token = localStorage.getItem("bunbun_token");
+
+                    if (!token) {
+                        alert('Please login to add items to cart');
+                        return;
+                    }
+
+                    if (!quantity || quantity < 1) {
+                        alert('Please select a valid quantity');
+                        return;
+                    }
+
+                  
+                    btn.html('<i class="fas fa-spinner fa-spin"></i> Adding...');
+                    btn.prop('disabled', true);
+
+                    $.ajax({
+                        url: '/api/cart/add',
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        data: JSON.stringify({
+                            product_id: productId,
+                            quantity: quantity
+                        }),
+                        success: function (response) {
+                          
+                            btn.html('<i class="fas fa-check"></i> Added!');
+                            btn.css('background', 'linear-gradient(45deg, #48bb78, #68d391)');
+
+                            setTimeout(function () {
+                                btn.html(originalText);
+                                btn.css('background', 'linear-gradient(45deg, var(--primary-brown), var(--accent-brown))');
+                                btn.prop('disabled', false);
+                            }, 2000);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Add to cart error:', {
+                                status: status,
+                                error: error,
+                                responseText: xhr.responseText
+                            });
+
+                            let errorMessage = 'Failed to add to cart';
+
+                            if (xhr.responseJSON && xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message;
+                            } else if (xhr.status === 401) {
+                                errorMessage = 'Please login to add items to cart';
+                            }
+
+                            alert(errorMessage);
+
+                            // Reset button
+                            btn.html(originalText);
+                            btn.prop('disabled', false);
+                        }
+                    });
+                });
+
+
+                loadProduct();
+
+                $(document).on('productLoaded', function () {
+                    startAutoSlide();
+                });
+            });
+        </script>
+    </body>
+
+</html>

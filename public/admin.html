@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUNBUN THREADS - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-brown: #8B4513;
+            --light-brown: #D2B48C;
+            --dark-brown: #654321;
+            --cream: #F5F5DC;
+            --warm-white: #FFF8E7;
+            --soft-brown: #DEB887;
+            --accent-brown: #A0522D;
+            --error-red: #E74C3C;
+            --success-green: #27AE60;
+            --yarn-pink: #F4A6A0;
+            --yarn-blue: #A8D5E2;
+            --yarn-yellow: #F5D97A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 50%, #F0E6D2 100%);
+            min-height: 100vh;
+            position: relative;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(222, 184, 135, 0.15) 0%, transparent 25%),
+                radial-gradient(circle at 80% 70%, rgba(244, 166, 160, 0.1) 0%, transparent 25%),
+                linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 100%);
+
+        }
+
+       
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image:
+                url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M20,50 Q50,20 80,50 Q50,80 20,50 Z" fill="none" stroke="%23D2B48C" stroke-width="0.5" opacity="0.15"/></svg>');
+            background-size: 150px;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .top-header {
+            background: linear-gradient(135deg, var(--primary-brown) 0%, var(--accent-brown) 100%);
+            color: var(--warm-white);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(139, 69, 19, 0.3);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 280px;
+            z-index: 1000;
+            transition: left 0.3s ease;
+            border-bottom: 3px solid var(--soft-brown);
+            height: 92px;
+        }
+
+        .top-header.sidebar-closed {
+            left: 80px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-section h1 {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .logo-section h1::after {
+            content: '✨';
+            font-size: 1rem;
+            position: absolute;
+            top: -5px;
+            right: -20px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .crochet-icon {
+            font-size: 2rem;
+            animation: gentle-bounce 3s ease-in-out infinite;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        @keyframes gentle-bounce {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--warm-white);
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s ease, height 0.3s ease;
+        }
+
+        .action-btn:hover::before {
+            width: 100%;
+            height: 100%;
+        }
+
+        .action-btn i {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: linear-gradient(180deg, var(--accent-brown) 0%, var(--primary-brown) 60%, var(--dark-brown) 100%);
+            color: var(--warm-white);
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            border-right: 3px solid var(--soft-brown);
+        }
+
+        .sidebar.closed {
+            width: 80px;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .sidebar-toggle {
+            background: none;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--warm-white);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .sidebar-toggle:hover {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .sidebar.closed .sidebar-title {
+            opacity: 0;
+        }
+
+        .nav-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-item {
+            margin: 0.8rem 0;
+            position: relative;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.2rem 1.5rem;
+            color: var(--warm-white);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 25px 25px 0;
+            margin-right: 1rem;
+        }
+
+        .sidebar.closed .nav-link {
+            justify-content: center;
+            padding: 1.2rem;
+            margin-right: 0;
+            border-radius: 10px;
+            margin: 0.8rem 0.5rem;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--yarn-pink), var(--yarn-blue));
+            transition: width 0.3s ease;
+            z-index: 1;
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        .nav-link i,
+        .nav-link span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-link:hover {
+            color: var(--dark-brown);
+            transform: translateX(8px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.closed .nav-link:hover {
+            transform: translateX(0) scale(1.1);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(90deg, var(--yarn-yellow), var(--soft-brown));
+            color: var(--dark-brown);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link.active::before {
+            width: 100%;
+            background: linear-gradient(90deg, var(--yarn-yellow), var(--soft-brown));
+        }
+
+        .nav-link.active::after {
+            content: '•';
+            position: absolute;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--dark-brown);
+            animation: pulse 2s infinite;
+        }
+
+        .sidebar.closed .nav-link.active::after {
+            display: none;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            min-width: 20px;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+        }
+
+        .nav-text {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .sidebar.closed .nav-text {
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        /* Tooltip for closed sidebar */
+        .nav-link::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--dark-brown);
+            color: var(--warm-white);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            margin-left: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar.closed .nav-link:hover::after {
+            opacity: 1;
+        }
+
+        .sidebar.closed .nav-link.active::after {
+            opacity: 0;
+        }
+
+        /* Decorative yarn balls */
+        .yarn-decoration {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0.3;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar.closed .yarn-decoration {
+            opacity: 0;
+        }
+
+        .yarn-ball {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .yarn-ball:nth-child(1) {
+            background: var(--yarn-pink);
+            animation-delay: 0s;
+        }
+
+        .yarn-ball:nth-child(2) {
+            background: var(--yarn-blue);
+            animation-delay: 1s;
+        }
+
+        .yarn-ball:nth-child(3) {
+            background: var(--yarn-yellow);
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 280px;
+            margin-top: 90px;
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.sidebar-closed {
+            margin-left: 80px;
+        }
+
+        /* Content Container with Split Layout */
+        .content-container {
+            display: flex;
+            gap: 0;
+            align-items: stretch;
+            min-height: calc(100vh - 150px);
+            position: relative;
+        }
+
+        .left-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(245, 245, 220, 0.3) 0%, rgba(210, 180, 140, 0.2) 100%);
+            border-radius: 20px 0 0 20px;
+            box-shadow: inset 0 0 20px rgba(139, 69, 19, 0.1);
+        }
+
+        .right-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 3rem;
+            background: linear-gradient(135deg, rgba(255, 248, 231, 0.4) 0%, rgba(245, 245, 220, 0.3) 100%);
+            border-radius: 0 20px 20px 0;
+            box-shadow: inset 0 0 20px rgba(139, 69, 19, 0.1);
+        }
+
+        /* Decorative Divider Line */
+        .content-container::before {
+            content: '';
+            position: absolute;
+            top: 10%;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            background: linear-gradient(to bottom,
+                    transparent 0%,
+                    var(--yarn-pink) 20%,
+                    var(--yarn-blue) 40%,
+                    var(--yarn-yellow) 60%,
+                    var(--soft-brown) 80%,
+                    transparent 100%);
+            border-radius: 2px;
+            z-index: 5;
+            box-shadow: 0 0 10px rgba(139, 69, 19, 0.3);
+        }
+
+        /* Decorative yarn pattern on divider */
+        .content-container::after {
+            content: '🧶';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            z-index: 6;
+            background: var(--warm-white);
+            padding: 0.5rem;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(139, 69, 19, 0.2);
+            animation: gentle-spin 6s ease-in-out infinite;
+        }
+
+        @keyframes gentle-spin {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) rotate(180deg);
+            }
+        }
+
+        .bun-img {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .bun-img img {
+            width: 100%;
+            height: auto;
+            max-width: 400px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+            animation: gentle-float 4s ease-in-out infinite;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.3);
+            border: 3px solid var(--light-brown);
+        }
+
+        .bun-img img:hover {
+            transform: scale(1.08);
+            box-shadow: 0 20px 50px rgba(139, 69, 19, 0.5);
+        }
+
+        @keyframes gentle-float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+        }
+
+        .welcome-card {
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--cream) 50%, #F8F3E3 100%);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(139, 69, 19, 0.15);
+            border: 3px solid var(--light-brown);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+        }
+
+        .welcome-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(244, 166, 160, 0.15) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+            z-index: 1;
+        }
+
+        .welcome-card>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .welcome-card h2 {
+            color: var(--primary-brown);
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .welcome-card p {
+            color: var(--dark-brown);
+            font-size: 1.2rem;
+            line-height: 1.8;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        /* Add decorative elements to left section */
+        .left-section::before {
+            content: '✨';
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            font-size: 1.5rem;
+            opacity: 0.4;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .left-section::after {
+            content: '🌟';
+            position: absolute;
+            bottom: 20%;
+            right: 20%;
+            font-size: 1.8rem;
+            opacity: 0.5;
+            animation: twinkle 4s ease-in-out infinite reverse;
+        }
+
+        .right-section::before {
+            content: '💝';
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            font-size: 1.5rem;
+            opacity: 0.4;
+            animation: gentle-bounce 5s ease-in-out infinite;
+        }
+
+        .right-section::after {
+            content: '🎀';
+            position: absolute;
+            bottom: 15%;
+            left: 15%;
+            font-size: 1.6rem;
+            opacity: 0.5;
+            animation: gentle-bounce 6s ease-in-out infinite reverse;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.2);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .content-container {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .content-container::before {
+                top: 50%;
+                left: 10%;
+                right: 10%;
+                bottom: auto;
+                width: 80%;
+                height: 4px;
+                transform: translateY(-50%);
+                background: linear-gradient(to right,
+                        transparent 0%,
+                        var(--yarn-pink) 20%,
+                        var(--yarn-blue) 40%,
+                        var(--yarn-yellow) 60%,
+                        var(--soft-brown) 80%,
+                        transparent 100%);
+            }
+
+            .content-container::after {
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .left-section,
+            .right-section {
+                border-radius: 0;
+                padding: 2rem;
+            }
+
+            .left-section {
+                border-radius: 20px 20px 0 0;
+            }
+
+            .right-section {
+                border-radius: 0 0 20px 20px;
+            }
+
+            .bun-img img {
+                max-width: 350px;
+            }
+
+            .welcome-card {
+                max-width: 450px;
+                padding: 2.5rem;
+            }
+
+            .welcome-card h2 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar.closed {
+                width: 0;
+            }
+
+            .top-header {
+                left: 80px;
+            }
+
+            .top-header.sidebar-closed {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 80px;
+                padding: 1rem;
+            }
+
+            .main-content.sidebar-closed {
+                margin-left: 0;
+            }
+
+            .content-container {
+                flex-direction: column;
+                min-height: calc(100vh - 120px);
+            }
+
+            .left-section,
+            .right-section {
+                padding: 1.5rem;
+            }
+
+            .bun-img img {
+                max-width: 280px;
+            }
+
+            .welcome-card {
+                padding: 2rem;
+                max-width: 400px;
+            }
+
+            .welcome-card h2 {
+                font-size: 1.8rem;
+            }
+
+            .welcome-card p {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <span class="sidebar-title">Admin Panel</span>
+        </div>
+
+        <nav class="nav-menu">
+            <div class="nav-item">
+                <a href="#" class="nav-link active" onclick="setActive(this)" data-tooltip="Charts">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span class="nav-text">Charts</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="setActive(this)" data-tooltip="Orders">
+                    <i class="fas fa-shopping-bag nav-icon"></i>
+                    <span class="nav-text">Orders</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="setActive(this)" data-tooltip="Users">
+                    <i class="fas fa-users nav-icon"></i>
+                    <span class="nav-text">Users</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="setActive(this)" data-tooltip="Items">
+                    <i class="fas fa-box-open nav-icon"></i>
+                    <span class="nav-text">Items</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" onclick="setActive(this)" data-tooltip="Category">
+                    <i class="fas fa-tags nav-icon"></i>
+                    <span class="nav-text">Category</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="yarn-decoration">
+            <div class="yarn-ball"></div>
+            <div class="yarn-ball"></div>
+            <div class="yarn-ball"></div>
+        </div>
+    </div>
+
+    <!-- Top Header -->
+    <div class="top-header" id="topHeader">
+        <div class="header-content">
+            <div class="logo-section">
+                <i class="fas fa-heart crochet-icon"></i>
+                <h1>BUNBUN THREADS</h1>
+            </div>
+
+            <div class="header-actions">
+                <button class="action-btn" onclick="location.href='index.html'" title="Go to Main Site">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button class="action-btn" onclick="showProfile()" title="Admin Profile">
+                    <i class="fas fa-user-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="content-container">
+            <!-- Left Section - Image -->
+            <div class="left-section">
+                <div class="bun-img">
+                    <img src="images/bunbun.png" alt="BunBun Logo">
+                </div>
+            </div>
+
+            <!-- Right Section - Welcome Card -->
+            <div class="right-section">
+                <div class="welcome-card">
+                    <h2>Welcome to BUNBUN THREADS Admin Dashboard</h2>
+                    <p>Manage your cozy crochet shop with love and care. Navigate through the sidebar to access
+                        different sections and keep your yarn business running smoothly! 🧶</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const topHeader = document.getElementById('topHeader');
+            const mainContent = document.getElementById('mainContent');
+
+            sidebar.classList.toggle('closed');
+            topHeader.classList.toggle('sidebar-closed');
+            mainContent.classList.toggle('sidebar-closed');
+        }
+
+        function setActive(element) {
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Add active class to clicked link
+            element.classList.add('active');
+        }
+
+        function showProfile() {
+            alert('Admin Profile - Coming Soon! 🌟');
+        }
+
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function () {
+            // Animate nav items on load
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-20px)';
+                setTimeout(() => {
+                    item.style.transition = 'all 0.5s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, index * 150);
+            });
+
+            // Add hover sound effect simulation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function () {
+                    if (!document.getElementById('sidebar').classList.contains('closed')) {
+                        this.style.transform = 'translateX(8px) scale(1.02)';
+                    }
+                });
+
+                link.addEventListener('mouseleave', function () {
+                    if (!this.classList.contains('active') && !document.getElementById('sidebar').classList.contains('closed')) {
+                        this.style.transform = 'translateX(0) scale(1)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

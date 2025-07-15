@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BunBun Crochet Shop</title>
+    <title>BunBun Threads</title>
     <link rel="stylesheet" href="css/style.css" />
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -26,9 +26,6 @@
             </nav>
         </div>
     </header>
-
-
-
 
     <style>
         :root {
@@ -240,7 +237,9 @@
             transition: all 0.3s ease;
             border: 2px solid transparent;
             position: relative;
-            height:520px;
+            height: 580px;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-card:hover {
@@ -261,28 +260,11 @@
         }
 
         .product-info {
-            padding: 25px;
-        }
-
-        .product-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary-brown);
-            margin-bottom: 10px;
-        }
-
-        .product-description {
-            color: var(--dark-brown);
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        .product-price {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--accent-brown);
-            margin-bottom: 15px;
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .product-category {
@@ -292,7 +274,42 @@
             padding: 5px 12px;
             border-radius: 15px;
             font-size: 0.8rem;
+            margin-bottom: 12px;
+            align-self: flex-start;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-brown);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+
+        .product-description {
+            color: var(--dark-brown);
+            font-size: 0.95rem;
+            line-height: 1.5;
             margin-bottom: 15px;
+            flex-grow: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--accent-brown);
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+            margin-top: auto;
         }
 
         .btn {
@@ -308,18 +325,24 @@
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
 
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--light-brown) 0%, var(--soft-brown) 100%);
+            color: var(--dark-brown);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, var(--soft-brown) 0%, var(--accent-brown) 100%);
+            color: var(--warm-white);
         }
 
         .error-message {
@@ -392,193 +415,229 @@
                 flex-direction: column;
                 align-items: stretch;
             }
+
+            .product-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
     </style>
-    </head>
 
-    <body>
-        <div class="container">
-            <div class="header">
-                <img src="images/bunbun.png" alt="BunBun Logo" style="width: 200px;height:200px;">
-                <h1>BunBun Crochet</h1>
-                <p>Handcrafted Wearables Collection</p>
-            </div>
-
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="categoryFilter">Category:</label>
-                    <select id="categoryFilter">
-                        <option value="">All Categories</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="priceFilter">Max Price:</label>
-                    <input type="number" id="priceFilter" placeholder="Enter max price">
-                </div>
-                <div class="filter-group">
-                    <label for="searchFilter">Search:</label>
-                    <input type="text" id="searchFilter" placeholder="Search products...">
-                </div>
-            </div>
-
-            <div id="loading" class="loading">
-                <div class="spinner"></div>
-                <p>Loading beautiful decor products...</p>
-            </div>
-
-            <div id="error" class="error-message" style="display: none;"></div>
-
-            <div id="products-container" class="products-grid"></div>
+    <div class="container">
+        <div class="header">
+            <img src="images/bunbun.png" alt="BunBun Logo" style="width: 200px;height:200px;">
+            <h1>BunBun Threads</h1>
+            <p>Handcrafted Decors Collection</p>
         </div>
 
-        <script>
-            $(document).ready(function () {
-                let allProducts = [];
-                let filteredProducts = [];
+        <div class="filters">
+            <div class="filter-group">
+                <label for="categoryFilter">Category:</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="priceFilter">Max Price:</label>
+                <input type="number" id="priceFilter" placeholder="Enter max price">
+            </div>
+            <div class="filter-group">
+                <label for="searchFilter">Search:</label>
+                <input type="text" id="searchFilter" placeholder="Search products...">
+            </div>
+        </div>
 
-                // Load products from backend
-                function loadProducts() {
-                    const endpoints = ['/api/products/decor'];
-                    let loadedCount = 0;
-                    allProducts = [];
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading beautiful decor products...</p>
+        </div>
 
-                    endpoints.forEach(endpoint => {
-                        $.ajax({
-                            url: endpoint,
-                            method: 'GET',
-                            success: function (data) {
-                                allProducts = allProducts.concat(data);
-                                loadedCount++;
+        <div id="error" class="error-message" style="display: none;"></div>
 
-                                if (loadedCount === endpoints.length) {
-                                    // All endpoints loaded
-                                    filteredProducts = [...allProducts];
-                                    displayProducts(filteredProducts);
-                                    populateFilters();
-                                    $('#loading').hide();
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                console.error('Error loading products from ' + endpoint + ':', error);
-                                loadedCount++;
+        <div id="products-container" class="products-grid"></div>
+    </div>
 
-                                if (loadedCount === endpoints.length) {
-                                    $('#loading').hide();
-                                    $('#error').show().text('Failed to load some products. Please try again later.');
-                                }
+    <script>
+        $(document).ready(function () {
+            let allProducts = [];
+            let filteredProducts = [];
+
+            function loadProducts() {
+                const endpoints = ['/api/products/decor'];
+                let loadedCount = 0;
+                allProducts = [];
+
+                endpoints.forEach(endpoint => {
+                    $.ajax({
+                        url: endpoint,
+                        method: 'GET',
+                        success: function (data) {
+                            allProducts = allProducts.concat(data);
+                            loadedCount++;
+
+                            if (loadedCount === endpoints.length) {
+                                filteredProducts = [...allProducts];
+                                displayProducts(filteredProducts);
+                                populateFilters();
+                                $('#loading').hide();
                             }
-                        });
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error loading products from ' + endpoint + ':', error);
+                            loadedCount++;
+
+                            if (loadedCount === endpoints.length) {
+                                $('#loading').hide();
+                                $('#error').show().text('Failed to load some products. Please try again later.');
+                            }
+                        }
                     });
+                });
+            }
+
+            function displayProducts(products) {
+                const container = $('#products-container');
+                container.empty();
+
+                if (products.length === 0) {
+                    container.html('<div class="no-products">No products found matching your criteria.</div>');
+                    return;
                 }
 
-                // Display products in grid
-                function displayProducts(products) {
-                    const container = $('#products-container');
-                    container.empty();
+                products.forEach(product => {
+                    const productCard = createProductCard(product);
+                    container.append(productCard);
+                });
+            }
 
-                    if (products.length === 0) {
-                        container.html('<div class="no-products">No products found matching your criteria.</div>');
-                        return;
-                    }
+            function createProductCard(product) {
+                const imageUrl = product.image || product.image_url || product.img_path ||
+                    'https://via.placeholder.com/300x250.png?text=No+Image';
+                const price = product.price ? `${parseFloat(product.price).toFixed(2)}` : 'Price not available';
+                const category = product.category || 'Uncategorized';
+                const description = product.description || 'No description available';
+                const name = product.name || 'Unknown Product';
 
-                    products.forEach(product => {
-                        const productCard = createProductCard(product);
-                        container.append(productCard);
-                    });
-                }
-
-                // Create product card HTML
-                function createProductCard(product) {
-                    const imageUrl = product.image || product.image_url || product.img_path ||
-                        'https://via.placeholder.com/300x250.png?text=No+Image';
-
-                    const price = product.price ? `$${parseFloat(product.price).toFixed(2)}` : 'Price not available';
-                    const category = product.category || 'Uncategorized';
-                    const description = product.description || 'No description available';
-                    const name = product.name || 'Unknown Product';
-
-                    return `
-                    <div class="product-card" data-product-id="${product.id}">
-                        <img src="${imageUrl}" alt="${name}" class="product-image" 
-                             onerror="this.src='https://via.placeholder.com/300x250/D2B48C/654321?text=No+Image'">
-                        <div class="product-info">
+                return `
+                <div class="product-card" data-product-id="${product.id}">
+                    <img src="${imageUrl}" alt="${name}" class="product-image" 
+                         onerror="this.src='https://via.placeholder.com/300x250/D2B48C/654321?text=No+Image'">
+                    <div class="product-info">
+                        <div class="product-content">
                             <div class="product-category">${category}</div>
                             <h3 class="product-name">${name}</h3>
                             <p class="product-description">${description}</p>
                             <div class="product-price">${price}</div>
+                        </div>
+                        <div class="product-actions">
+                            <a href="product-details.html?id=${product.id}" class="btn btn-secondary view-more">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
                             <button class="btn add-to-cart" data-product-id="${product.id}">
-                                Add to Cart
+                                <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
                         </div>
                     </div>
-                `;
-                }
+                </div>
+            `;
+            }
 
-                // Populate filter options
-                function populateFilters() {
-                    const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
-                    const categorySelect = $('#categoryFilter');
+            // Populate filter options
+            function populateFilters() {
+                const categories = [...new Set(allProducts.map(p => p.category).filter(c => c))];
+                const categorySelect = $('#categoryFilter');
 
-                    categories.forEach(category => {
-                        categorySelect.append(`<option value="${category}">${category}</option>`);
-                    });
-                }
+                categories.forEach(category => {
+                    categorySelect.append(`<option value="${category}">${category}</option>`);
+                });
+            }
 
-                // Filter products
-                function filterProducts() {
-                    const categoryFilter = $('#categoryFilter').val();
-                    const priceFilter = parseFloat($('#priceFilter').val());
-                    const searchFilter = $('#searchFilter').val().toLowerCase();
+            // Filter products
+            function filterProducts() {
+                const categoryFilter = $('#categoryFilter').val();
+                const priceFilter = parseFloat($('#priceFilter').val());
+                const searchFilter = $('#searchFilter').val().toLowerCase();
 
-                    filteredProducts = allProducts.filter(product => {
-                        const matchesCategory = !categoryFilter || product.category === categoryFilter;
-                        const matchesPrice = !priceFilter || parseFloat(product.price) <= priceFilter;
-                        const matchesSearch = !searchFilter ||
-                            product.name.toLowerCase().includes(searchFilter) ||
-                            product.description.toLowerCase().includes(searchFilter);
+                filteredProducts = allProducts.filter(product => {
+                    const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                    const matchesPrice = !priceFilter || parseFloat(product.price) <= priceFilter;
+                    const matchesSearch = !searchFilter ||
+                        product.name.toLowerCase().includes(searchFilter) ||
+                        product.description.toLowerCase().includes(searchFilter);
 
-                        return matchesCategory && matchesPrice && matchesSearch;
-                    });
-
-                    displayProducts(filteredProducts);
-                }
-
-                // Event listeners for filters
-                $('#categoryFilter, #priceFilter, #searchFilter').on('change keyup', filterProducts);
-
-                // Add to cart functionality
-                $(document).on('click', '.add-to-cart', function () {
-                    const productId = $(this).data('product-id');
-                    addToCart(productId);
+                    return matchesCategory && matchesPrice && matchesSearch;
                 });
 
-                // Add to cart function
-                function addToCart(productId) {
-                    $.ajax({
-                        url: '/api/cart/add',
-                        method: 'POST',
-                        data: { productId: productId },
-                        success: function (response) {
-                            // Show success message
-                            const btn = $(`.add-to-cart[data-product-id="${productId}"]`);
-                            const originalText = btn.text();
-                            btn.text('Added!').css('background', 'var(--success-green)');
+                displayProducts(filteredProducts);
+            }
 
-                            setTimeout(() => {
-                                btn.text(originalText).css('background', '');
-                            }, 2000);
-                        },
-                        error: function (xhr, status, error) {
-                            console.error('Error adding to cart:', error);
-                            alert('Failed to add product to cart. Please try again.');
-                        }
-                    });
-                }
+            // Event listeners for filters
+            $('#categoryFilter, #priceFilter, #searchFilter').on('change keyup', filterProducts);
 
-                // Initialize
-                loadProducts();
+            // Add to cart functionality
+            $(document).on('click', '.add-to-cart', function () {
+                const productId = $(this).data('product-id');
+                addToCart(productId);
             });
-        </script>
-    </body>
+
+            // Add to cart function
+            function addToCart(productId) {
+                $.ajax({
+                    url: '/api/cart/add',
+                    method: 'POST',
+                    data: { productId: productId },
+                    success: function (response) {
+                        // Show success message
+                        const btn = $(`.add-to-cart[data-product-id="${productId}"]`);
+                        const originalText = btn.html();
+                        btn.html('<i class="fas fa-check"></i> Added!').css('background', 'var(--success-green)');
+
+                        setTimeout(() => {
+                            btn.html(originalText).css('background', '');
+                        }, 2000);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error adding to cart:', error);
+                        alert('Failed to add product to cart. Please try again.');
+                    }
+                });
+            }
+
+            // Initialize
+            loadProducts();
+        });
+    </script>
+</body>
+
+<footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>About BunBun Crochet</h3>
+        <p>We create beautiful, handmade crochet pieces with love and attention to detail. Every item is crafted with care to bring warmth and joy to your life.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <p><a href="#">Home</a></p>
+        <p><a href="#">About Us</a></p>
+        <p><a href="#">Shop</a></p>
+        <p><a href="#">Custom Orders</a></p>
+        <p><a href="#">Contact</a></p>
+      </div>
+      <div class="footer-section">
+        <h3>Connect With Us</h3>
+        <p>Follow us for updates and new arrivals!</p>
+        <div class="social-links">
+          <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="Pinterest"><i class="fab fa-pinterest"></i></a>
+          <a href="#" title="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 BunBun Crochet Shop. All rights reserved. Made with ❤️ for crochet lovers.</p>
+    </div>
+  </footer>
+
 
 </html>

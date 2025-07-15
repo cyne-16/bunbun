@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - BunBun Crochet Shop</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <style>
@@ -464,6 +463,24 @@
             }
         }
 
+        /* Error Message */
+        .error-message-global {
+            background: var(--error-red);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            transform: translateY(-20px);
+            opacity: 0;
+            display: none;
+        }
+
+        .error-message-global.show {
+            display: block;
+            animation: fadeInSuccess 0.5s ease-out forwards;
+        }
+
         /* Remember Me Checkbox */
         .remember-me {
             display: flex;
@@ -568,7 +585,6 @@
     <header>
         <div class="header-content">
             <div class="logo">
-
                 <h1>BunBun Threads</h1>
             </div>
             <nav id="nav-icons">
@@ -583,9 +599,12 @@
             <div class="success-message" id="successMessage">
                 <i class="fas fa-check-circle"></i> Login successful! Welcome back!
             </div>
+            
+            <div class="error-message-global" id="errorMessage">
+                <i class="fas fa-exclamation-circle"></i> <span id="errorMessageText"></span>
+            </div>
 
             <h2>Welcome Back! <img src="images/bunbun.png" alt="Bunny" class="emoji-icon"></h2>
-
 
             <div class="input-group">
                 <input type="email" id="loginEmail" placeholder="Email Address" required>
@@ -618,6 +637,14 @@
 
     <script>
         $(document).ready(function () {
+            // Check if user is already logged in
+            const authToken = localStorage.getItem('authToken');
+            if (authToken) {
+                // Redirect to home if already logged in
+                window.location.href = "home.html";
+                return;
+            }
+
             // Create floating particles
             function createParticle() {
                 const particle = $('<div class="particle"></div>');
@@ -656,6 +683,22 @@
                 errorDiv.removeClass('show');
             }
 
+            function showGlobalError(message) {
+                $('#errorMessageText').text(message);
+                $('#errorMessage').addClass('show');
+                setTimeout(() => {
+                    $('#errorMessage').removeClass('show');
+                }, 5000);
+            }
+
+            // Check for URL parameters (for password reset success messages)
+            const urlParams = new URLSearchParams(window.location.search);
+            const resetSuccess = urlParams.get('resetSuccess');
+            
+            if (resetSuccess === 'true') {
+                showGlobalError('Password reset successful. Please login with your new password.');
+            }
+
             $('#loginEmail').on('input blur', function () {
                 const value = $(this).val();
                 if (value && !validateEmail(value)) {
@@ -690,7 +733,27 @@
                     return;
                 }
 
-                alert('Password reset instructions have been sent to your email address.');
+                // Show loading state
+                const originalText = $(this).text();
+                $(this).html('<i class="fas fa-spinner fa-spin"></i> Sending...');
+                
+                // Send reset request
+                $.ajax({
+                    url: "/api/auth/forgot-password",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ email: email.trim().toLowerCase() }),
+                    success: function () {
+                        alert('Password reset instructions have been sent to your email address.');
+                    },
+                    error: function (xhr) {
+                        const error = xhr.responseJSON?.error || "Failed to send reset instructions";
+                        showGlobalError(error);
+                    },
+                    complete: function () {
+                        $(this).text(originalText);
+                    }
+                });
             });
 
             $("#submitLogin").on("click", function (e) {
@@ -700,6 +763,10 @@
                 const password = $("#loginPassword").val();
                 const rememberMe = $("#rememberMe").is(':checked');
                 let isValid = true;
+
+                // Clear previous errors
+                $('.error-message').removeClass('show');
+                $('#errorMessage').removeClass('show');
 
                 if (!email || !validateEmail(email)) {
                     showError('loginEmail', 'Please enter a valid email address');
@@ -721,40 +788,58 @@
                 buttonText.text('Signing In...');
                 loading.show();
 
-                const credentials = { email, password };
+                // Check if remember me is checked to store token longer
+                const credentials = { 
+                    email, 
+                    password,
+                    rememberMe
+                };
 
-                setTimeout(() => {
-                    $.ajax({
-                        url: "/api/auth/login",
-                        method: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify({
-                            email: email.trim().toLowerCase(),
-                            password: password.trim()
-                        }),
-                        success: function (response) {
-                            // Store the token
+                $.ajax({
+                    url: "/api/auth/login",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        email: email.trim().toLowerCase(),
+                        password: password.trim(),
+                        rememberMe: rememberMe
+                    }),
+                    success: function (response) {
+                        // Store the token
+                        if (rememberMe) {
                             localStorage.setItem('authToken', response.token);
-                            $('#successMessage').addClass('show');
-                            setTimeout(() => {
-                                window.location.href = "home.html";
-                            }, 2000);
-                        },
-                        error: function (xhr) {
-                            const error = xhr.responseJSON?.error || "Login failed";
-                            if (xhr.status === 401) {
-                                showError('loginPassword', error);
-                            } else {
-                                alert(error);
-                            }
-                        },
-                        complete: function () {
-                            button.prop('disabled', false);
-                            buttonText.text('Login');
-                            loading.hide();
+                            // Also set a cookie that lasts longer
+                            document.cookie = `authToken=${response.token}; path=/; max-age=${30 * 24 * 60 * 60}`; // 30 days
+                        } else {
+                            localStorage.setItem('authToken', response.token);
+                            // Session cookie
+                            document.cookie = `authToken=${response.token}; path=/`;
                         }
-                    });
-                }, 1000);
+                        
+                        $('#successMessage').addClass('show');
+                        
+                        // Redirect after delay
+                        setTimeout(() => {
+                            window.location.href = "home.html";
+                        }, 2000);
+                    },
+                    error: function (xhr) {
+                        const error = xhr.responseJSON?.error || "Login failed. Please try again.";
+                        
+                        if (xhr.status === 401) {
+                            showError('loginPassword', error);
+                        } else if (xhr.status === 429) {
+                            showGlobalError("Too many attempts. Please try again later.");
+                        } else {
+                            showGlobalError(error);
+                        }
+                    },
+                    complete: function () {
+                        button.prop('disabled', false);
+                        buttonText.text('Login');
+                        loading.hide();
+                    }
+                });
             });
 
             // Enter key submission
@@ -768,7 +853,5 @@
             $('#loginEmail').focus();
         });
     </script>
-
 </body>
-
 </html>
